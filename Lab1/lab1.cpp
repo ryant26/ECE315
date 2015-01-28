@@ -73,6 +73,7 @@ Lcd myLCD;
 void UserMain(void * pd) {
 
 	BYTE err = OS_NO_ERR;
+
     InitializeStack();
     OSChangePrio(MAIN_PRIO);
     EnableAutoUpdate();
@@ -92,10 +93,21 @@ void UserMain(void * pd) {
      *
      */
 	// Initialize the semaphores we will use for ordered printing
-	OSSemInit (&mySem, 1);
-	OSSemInit (&mySem2, 0);
-	OSSemInit (&mySem3, 0);
-	OSSemInit (&mySem4, 0);
+	if ((err = OSSemInit (&mySem, 1)) == OS_SEM_ERR){
+		display_error("Error initializing mySem", err);
+	}
+
+	if ((err = OSSemInit (&mySem2, 0)) == OS_SEM_ERR){
+			display_error("Error initializing mySem2", err);
+	}
+
+	if ((err = OSSemInit (&mySem3, 0)) == OS_SEM_ERR){
+			display_error("Error initializing mySem3", err);
+	}
+
+	if ((err = OSSemInit (&mySem4, 0)) == OS_SEM_ERR){
+			display_error("Error initializing mySem4", err);
+	}
 
 	#ifndef _DEBUG
     EnableSmartTraps();
