@@ -1,0 +1,244 @@
+/* Nancy Minderman
+* Dec 3, 2014
+* nancy.minderman@ualberta.ca
+* ECE315
+*/
+
+#include "predef.h"
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <startnet.h>
+#include <autoupdate.h>
+#include <smarttrap.h>
+#include <taskmon.h>
+#include <NetworkDebug.h>
+#include "lcd.h"
+
+/* User task priorities always based on MAIN_PRIO */
+/* The priorities between MAIN_PRIO and the IDLE_PRIO are available */
+#define TASK1_PRIO 	MAIN_PRIO + 1
+#define TASK2_PRIO 	MAIN_PRIO + 2
+#define TASK3_PRIO	MAIN_PRIO + 3
+#define TASK4_PRIO	MAIN_PRIO + 4
+
+/* If you create new C subroutines you'll need to add them inside
+ * the braces
+ */
+
+extern "C" {
+void UserMain(void * pd);
+void StartTask1(void);
+void StartTask2(void);
+void StartTask3(void);
+void StartTask4(void);
+void Task1Main(void * pd);
+void Task2Main(void * pd);
+void Task3Main(void * pd);
+void Task4Main(void * pd);
+}
+
+extern BYTE display_error(const char * info, BYTE error);
+
+/* Remember to add in a personal identifier next to the Lab 1 string
+* I'll be looking for it in the demo
+*/
+const char * AppName= "Place your name here";
+const char * Welcome="Welcome to ECE315-Winter2015";
+OS_SEM mySem;
+
+/* Task stacks for all the user tasks */
+/* If you add a new task you'll need to add a new stack for that task */
+DWORD Task1Stk[USER_TASK_STK_SIZE] __attribute__( ( aligned( 4 ) ) );
+DWORD Task2Stk[USER_TASK_STK_SIZE] __attribute__( ( aligned( 4 ) ) );
+DWORD Task3Stk[USER_TASK_STK_SIZE] __attribute__( ( aligned( 4 ) ) );
+DWORD Task4Stk[USER_TASK_STK_SIZE] __attribute__( ( aligned( 4 ) ) );
+
+/* This really needs to be in the heap so it's here and allocated
+ * as a global class due to its size */
+Lcd myLCD;
+
+/* Everything in user land starts with this task */
+void UserMain(void * pd) {
+
+	BYTE err = OS_NO_ERR;
+    InitializeStack();
+    OSChangePrio(MAIN_PRIO);
+    EnableAutoUpdate();
+    StartHTTP();
+    EnableTaskMonitor();
+    /* The LCD must be initialized before any task that may use the
+     * class is created.
+     */
+    myLCD.Init(LCD_BOTH_SCR);
+    //myLCD.PrintString(LCD_UPPER_SCR, Welcome);
+    OSTimeDly(TICKS_PER_SECOND*1);
+
+    /* For exercise 3 and 4 put your semaphore and/or queue initializations
+     * here.
+     *
+     *
+     */
+
+	OSSemInit (&mySem, 1);
+    #ifndef _DEBUG
+    EnableSmartTraps();
+    #endif
+
+    #ifdef _DEBUG
+    InitializeNetworkGDB_and_Wait();
+    #endif
+
+    iprintf("Application started: %s\n", AppName);
+
+    /* Start all of our user tasks here. If you add a new task
+     * add it in here.
+     */
+    StartTask1();
+    StartTask2();
+    StartTask3();
+    StartTask4();
+
+    while (1) {
+    	OSTimeDly(TICKS_PER_SECOND*100);
+    }
+}
+
+/* Name: StartTask1
+ * Description: Creates the functional part of the task, assigns the name
+ * 				and priority.
+ * Inputs: none
+ * Outputs: none
+ */
+void StartTask1(void) {
+	BYTE err = OS_NO_ERR;
+
+	err = display_error ("Start Task 1: ",
+					OSTaskCreatewName( Task1Main, 			//functional part of the task
+					(void *)NULL,							// task data - not usually used
+				 	(void *) &Task1Stk[USER_TASK_STK_SIZE], // task stack top
+				 	(void *) &Task1Stk[0],					// task stack bottom
+				 	TASK1_PRIO, "Task 1" )					// task priority and task name
+	);
+}
+
+/* Name: Task1Main
+ * Description:
+ * Inputs:  void * pd -- pointer to generic data . Currently unused.
+ * Outputs: none
+ */
+void	Task1Main( void * pd) {
+	/* place semaphore usage code inside the loop */
+	while (1) {
+			OSSemPend(&mySem, 0);
+			myLCD.Home(LCD_LOWER_SCR);
+			myLCD.MoveCursor(LCD_LOWER_SCR, LCD_COLS);
+			for (int i = 0; i < 10; i++){
+				myLCD.PrintChar(LCD_LOWER_SCR, 'a');
+				OSTimeDly(TICKS_PER_SECOND*1);
+			}
+			OSSemPost(&mySem);
+			OSTimeDly(TICKS_PER_SECOND*100);
+	}
+
+
+}
+//Task 2
+void StartTask2(void) {
+	BYTE err = OS_NO_ERR;
+
+	err = display_error ("Start Task 2: ",
+					OSTaskCreatewName( Task2Main, 			//functional part of the task
+					(void *)NULL,							// task data - not usually used
+				 	(void *) &Task2Stk[USER_TASK_STK_SIZE], // task stack top
+				 	(void *) &Task2Stk[0],					// task stack bottom
+				 	TASK2_PRIO, "Task 2" )					// task priority and task name
+	);
+}
+
+/* Name: Task1Main
+ * Description:
+ * Inputs:  void * pd -- pointer to generic data . Currently unused.
+ * Outputs: none
+ */
+void	Task2Main( void * pd) {
+	/* place semaphore usage code inside the loop */
+	while (1) {
+			OSSemPend(&mySem, 0);
+			myLCD.MoveCursor(LCD_LOWER_SCR, (LCD_COLS / 4) * 1);
+			for (int i = 0; i < 10; i++){
+				myLCD.PrintChar(LCD_LOWER_SCR, 'b');
+			}
+			OSSemPost(&mySem);
+			OSTimeDly(TICKS_PER_SECOND*100);
+	}
+
+
+}
+
+//Task 3
+void StartTask3(void) {
+	BYTE err = OS_NO_ERR;
+
+	err = display_error ("Start Task 3: ",
+					OSTaskCreatewName( Task3Main, 			//functional part of the task
+					(void *)NULL,							// task data - not usually used
+				 	(void *) &Task3Stk[USER_TASK_STK_SIZE], // task stack top
+				 	(void *) &Task3Stk[0],					// task stack bottom
+				 	TASK3_PRIO, "Task 3" )					// task priority and task name
+	);
+}
+
+/* Name: Task1Main
+ * Description:
+ * Inputs:  void * pd -- pointer to generic data . Currently unused.
+ * Outputs: none
+ */
+void	Task3Main( void * pd) {
+	/* place semaphore usage code inside the loop */
+	while (1) {
+			OSSemPend(&mySem, 0);
+			myLCD.MoveCursor(LCD_UPPER_SCR, (LCD_COLS / 4) * 6);
+			for (int i = 0; i < 10; i++){
+				myLCD.PrintChar(LCD_UPPER_SCR, 'c');
+			}
+			OSSemPost(&mySem);
+			OSTimeDly(TICKS_PER_SECOND*100);
+	}
+
+
+}
+
+//Task 2
+void StartTask4(void) {
+	BYTE err = OS_NO_ERR;
+
+	err = display_error ("Start Task 4: ",
+					OSTaskCreatewName( Task4Main, 			//functional part of the task
+					(void *)NULL,							// task data - not usually used
+				 	(void *) &Task4Stk[USER_TASK_STK_SIZE], // task stack top
+				 	(void *) &Task4Stk[0],					// task stack bottom
+				 	TASK4_PRIO, "Task 4" )					// task priority and task name
+	);
+}
+
+/* Name: Task1Main
+ * Description:
+ * Inputs:  void * pd -- pointer to generic data . Currently unused.
+ * Outputs: none
+ */
+void	Task4Main( void * pd) {
+	/* place semaphore usage code inside the loop */
+	while (1) {
+			OSSemPend(&mySem, 0);
+			myLCD.MoveCursor(LCD_UPPER_SCR, (LCD_COLS / 4) * 3);
+			for (int i = 0; i < 10; i++){
+				myLCD.PrintChar(LCD_UPPER_SCR, 'd');
+			}
+			OSSemPost(&mySem);
+			OSTimeDly(TICKS_PER_SECOND*100);
+	}
+
+
+}
+
