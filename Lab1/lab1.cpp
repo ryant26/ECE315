@@ -51,6 +51,8 @@ extern BYTE display_error(const char * info, BYTE error);
 */
 const char * AppName= "CH and RT";
 const char * Welcome="Welcome to ECE315-Winter2015";
+
+/* These are the semaphores for exercise 4*/
 static OS_SEM mySem;
 static OS_SEM mySem2;
 static OS_SEM mySem3;
@@ -89,12 +91,13 @@ void UserMain(void * pd) {
      *
      *
      */
-
+	// Initialize the semaphores we will use for ordered printing
 	OSSemInit (&mySem, 1);
 	OSSemInit (&mySem2, 0);
 	OSSemInit (&mySem3, 0);
 	OSSemInit (&mySem4, 0);
-    #ifndef _DEBUG
+
+	#ifndef _DEBUG
     EnableSmartTraps();
     #endif
 
@@ -143,12 +146,19 @@ void StartTask1(void) {
 void	Task1Main( void * pd) {
 	/* place semaphore usage code inside the loop */
 	while (1) {
+			//Wait for sem1
 			OSSemPend(&mySem, 0);
+
+			//Position Cursor
 			myLCD.MoveCursor(LCD_LOWER_SCR, QUADRANT1);
+
+			//Print 10 characters to the LCD screen
 			for (int i = 0; i < 10; i++){
 				myLCD.PrintChar(LCD_LOWER_SCR, 'a');
 				OSTimeDly(TICKS_PER_SECOND*0.1);
 			}
+
+			//Post to the appropriate sem based on dip switch
 			if (!getdipsw()){
 				OSSemPost(&mySem2);
 			} else {
@@ -172,7 +182,7 @@ void StartTask2(void) {
 	);
 }
 
-/* Name: Task1Main
+/* Name: Task2Main
  * Description:
  * Inputs:  void * pd -- pointer to generic data . Currently unused.
  * Outputs: none
@@ -181,11 +191,17 @@ void	Task2Main( void * pd) {
 	/* place semaphore usage code inside the loop */
 	while (1) {
 			OSSemPend(&mySem2, 0);
+
+			//Position the cursor
 			myLCD.MoveCursor(LCD_LOWER_SCR, QUADRANT2);
+
+			//Print 10 characters to the LCD screen
 			for (int i = 0; i < 10; i++){
 				myLCD.PrintChar(LCD_LOWER_SCR, 'b');
 				OSTimeDly(TICKS_PER_SECOND*0.1);
 			}
+
+			//Post to the appropriate sem based on dip switch
 			if (!getdipsw()){
 				OSSemPost(&mySem3);
 			} else {
@@ -209,7 +225,7 @@ void StartTask3(void) {
 	);
 }
 
-/* Name: Task1Main
+/* Name: Task3Main
  * Description:
  * Inputs:  void * pd -- pointer to generic data . Currently unused.
  * Outputs: none
@@ -218,11 +234,17 @@ void	Task3Main( void * pd) {
 	/* place semaphore usage code inside the loop */
 	while (1) {
 			OSSemPend(&mySem3, 0);
+
+			//Position the cursor
 			myLCD.MoveCursor(LCD_UPPER_SCR, QUADRANT3);
+
+			//Print 10 characters to the LCD screen
 			for (int i = 0; i < 10; i++){
 				myLCD.PrintChar(LCD_UPPER_SCR, 'c');
 				OSTimeDly(TICKS_PER_SECOND*0.1);
 			}
+
+			//Post to the appropriate sem based on dip switch
 			if (!getdipsw()){
 				OSSemPost(&mySem4);
 			} else {
@@ -246,7 +268,7 @@ void StartTask4(void) {
 	);
 }
 
-/* Name: Task1Main
+/* Name: Task4Main
  * Description:
  * Inputs:  void * pd -- pointer to generic data . Currently unused.
  * Outputs: none
@@ -255,11 +277,17 @@ void	Task4Main( void * pd) {
 	/* place semaphore usage code inside the loop */
 	while (1) {
 			OSSemPend(&mySem4, 0);
+
+			//Position the cursor
 			myLCD.MoveCursor(LCD_UPPER_SCR, QUADRANT4);
+
+			//Print 10 characters to the LCD scrren
 			for (int i = 0; i < 10; i++){
 				myLCD.PrintChar(LCD_UPPER_SCR, 'd');
 				OSTimeDly(TICKS_PER_SECOND*0.1);
 			}
+
+			//Post to the appropriate sem based on dip switch
 			if (!getdipsw()){
 				myLCD.Clear(LCD_BOTH_SCR);
 				OSSemPost(&mySem);
