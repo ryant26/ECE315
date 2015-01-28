@@ -114,10 +114,6 @@ void UserMain(void * pd) {
     StartTask2();
     StartTask3();
     StartTask4();
-
-    while (1) {
-    	OSTimeDly(TICKS_PER_SECOND*100);
-    }
 }
 
 /* Name: StartTask1
