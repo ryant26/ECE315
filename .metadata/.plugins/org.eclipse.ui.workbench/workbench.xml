@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workbench progressCount="19" version="2.0">
 <workbenchAdvisor/>
-<window height="767" width="1024" x="-6" y="70">
+<window height="767" maximized="true" width="1024" x="-6" y="70">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="160"/>
@@ -31,21 +31,31 @@
 <part id="0"/>
 <part id="1"/>
 <part id="2"/>
+<part id="3"/>
+<part id="4"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.cpp" partName="lcd.cpp" path="D:/ECE315_Winter2015_Workspace/Lab1/lcd.cpp" title="lcd.cpp" tooltip="Lab1/lcd.cpp" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Lab1/lcd.cpp"/>
-<editorState selectionLength="0" selectionOffset="9408"/>
-</editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.h" partName="lcd.h" path="D:/ECE315_Winter2015_Workspace/Lab1/lcd.h" title="lcd.h" tooltip="Lab1/lcd.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Lab1/lcd.h"/>
 <editorState selectionLength="8" selectionOffset="1208"/>
 </editor>
 <editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="lab1.cpp" partName="lab1.cpp" path="D:/ECE315_Winter2015_Workspace/Lab1/lab1.cpp" title="lab1.cpp" tooltip="Lab1/lab1.cpp" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Lab1/lab1.cpp"/>
-<editorState selectionLength="0" selectionOffset="2279"/>
+<editorState selectionLength="0" selectionOffset="5216"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.cpp" partName="lcd.cpp" path="D:/ECE315_Winter2015_Workspace/Lab1/lcd.cpp" title="lcd.cpp" tooltip="Lab1/lcd.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Lab1/lcd.cpp"/>
+<editorState selectionLength="0" selectionOffset="10336"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="error_wrapper.cpp" partName="error_wrapper.cpp" path="D:/ECE315_Winter2015_Workspace/Lab1/error_wrapper.cpp" title="error_wrapper.cpp" tooltip="Lab1/error_wrapper.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Lab1/error_wrapper.cpp"/>
+<editorState selectionLength="14" selectionOffset="1923"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="utils.h" partName="utils.h" title="utils.h" tooltip="C:/nburn/include/utils.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" path="C:\nburn\include\utils.h" project="Lab1"/>
+<editorState selectionLength="8" selectionOffset="7686"/>
 </editor>
 </editors>
 <views>
@@ -59,8 +69,8 @@
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
 <expanded>
-<category IMemento.internal.id="Warnings"/>
 <category IMemento.internal.id="Errors"/>
+<category IMemento.internal.id="Warnings"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="0" org.eclipse.ui.ide.markerType="0" org.eclipse.ui.ide.pathField="0" org.eclipse.ui.ide.resourceField="0" org.eclipse.ui.ide.severityAndDescriptionField="0"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
@@ -172,139 +182,11 @@
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/Lab1/lab1.cpp"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/Lab1/lcd.cpp"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/Lab1/lcd.h"/>
+<editor factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="C:\nburn\include\utils.h" project="Lab1"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/Lab1/lcd.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/Lab1/lcd.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/Lab1/error_wrapper.cpp"/>
 </editors>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="1637" y="8"/>
-</item>
-<item historyLabel="lcd.cpp" index="1">
-<position info="not_deleted" x="8808" y="4"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="1637" y="8"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="1800" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="1637" y="8"/>
-</item>
-<item historyLabel="lcd.cpp" index="1">
-<position info="not_deleted" x="9207" y="102"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="1800" y="0"/>
-</item>
-<item historyLabel="lcd.cpp" index="1">
-<position info="not_deleted" x="9207" y="102"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="2421" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="1637" y="8"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="2421" y="0"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="1637" y="8"/>
-</item>
-<item historyLabel="lcd.cpp" index="1">
-<position info="not_deleted" x="6698" y="0"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position/>
-</item>
-<item historyLabel="lcd.cpp" index="1">
-<position info="not_deleted" x="14519" y="1"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position/>
-</item>
-<item historyLabel="lcd.cpp" index="1">
-<position info="not_deleted" x="12091" y="9"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="1637" y="8"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="3159" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="5445" y="3"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="5445" y="3"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="4039" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="5445" y="3"/>
-</item>
-<item historyLabel="lcd.cpp" index="1">
-<position info="not_deleted" x="12091" y="9"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="5445" y="3"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="4039" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="5718" y="15"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="3911" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="5718" y="15"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="3911" y="0"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="3870" y="0"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="3797" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="5474" y="23"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="3797" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="5474" y="23"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="3795" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="1280" y="15"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="3795" y="0"/>
-</item>
-<item historyLabel="lcd.h" index="2">
-<position info="not_deleted" x="1208" y="8"/>
-</item>
-<item historyLabel="lab1.cpp" index="0">
-<position info="not_deleted" x="3795" y="0"/>
-</item>
 <item historyLabel="lab1.cpp" index="0">
 <position info="not_deleted" x="3879" y="32"/>
 </item>
@@ -320,8 +202,140 @@
 <item historyLabel="lcd.h" index="2">
 <position info="not_deleted" x="1208" y="8"/>
 </item>
-<item active="true" historyLabel="lab1.cpp" index="0">
+<item historyLabel="lab1.cpp" index="0">
 <position info="not_deleted" x="3750" y="0"/>
+</item>
+<item historyLabel="utils.h" index="3">
+<position info="not_deleted" x="7686" y="8"/>
+</item>
+<item historyLabel="lcd.cpp" index="4">
+<position info="not_deleted" x="9408" y="0"/>
+</item>
+<item historyLabel="utils.h" index="3">
+<position info="not_deleted" x="7686" y="8"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="4454" y="0"/>
+</item>
+<item historyLabel="lcd.cpp" index="4">
+<position info="not_deleted" x="9408" y="0"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="4454" y="0"/>
+</item>
+<item historyLabel="lcd.h" index="5">
+<position info="not_deleted" x="1208" y="8"/>
+</item>
+<item historyLabel="utils.h" index="3">
+<position info="not_deleted" x="7681" y="4"/>
+</item>
+<item historyLabel="lcd.h" index="5">
+<position info="not_deleted" x="1208" y="8"/>
+</item>
+<item historyLabel="utils.h" index="3">
+<position info="not_deleted" x="7681" y="4"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="7834" y="15"/>
+</item>
+<item historyLabel="lcd.h" index="5">
+<position info="not_deleted" x="1208" y="8"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="7834" y="15"/>
+</item>
+<item historyLabel="utils.h" index="3">
+<position info="not_deleted" x="7681" y="4"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="1239" y="0"/>
+</item>
+<item historyLabel="lcd.h" index="5">
+<position info="not_deleted" x="1208" y="8"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="8289" y="0"/>
+</item>
+<item historyLabel="lcd.cpp" index="4">
+<position/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="33" y="0"/>
+</item>
+<item historyLabel="lcd.cpp" index="4">
+<position/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="1265" y="28"/>
+</item>
+<item historyLabel="lcd.cpp" index="4">
+<position/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="3261" y="0"/>
+</item>
+<item historyLabel="lcd.cpp" index="4">
+<position info="not_deleted" x="10328" y="0"/>
+</item>
+<item historyLabel="error_wrapper.cpp" index="6">
+<position/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="2690" y="0"/>
+</item>
+<item historyLabel="error_wrapper.cpp" index="6">
+<position info="not_deleted" x="1448" y="0"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="2690" y="0"/>
+</item>
+<item historyLabel="error_wrapper.cpp" index="6">
+<position info="not_deleted" x="1448" y="0"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="301" y="0"/>
+</item>
+<item historyLabel="error_wrapper.cpp" index="6">
+<position info="not_deleted" x="1448" y="0"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="301" y="0"/>
+</item>
+<item historyLabel="error_wrapper.cpp" index="6">
+<position info="not_deleted" x="1886" y="13"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="4128" y="0"/>
+</item>
+<item historyLabel="error_wrapper.cpp" index="6">
+<position info="not_deleted" x="1923" y="14"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="4128" y="0"/>
+</item>
+<item historyLabel="error_wrapper.cpp" index="6">
+<position info="not_deleted" x="1923" y="14"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="8096" y="0"/>
+</item>
+<item historyLabel="utils.h" index="3">
+<position info="not_deleted" x="7686" y="8"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="5556" y="0"/>
+</item>
+<item historyLabel="lcd.cpp" index="4">
+<position info="not_deleted" x="14568" y="0"/>
+</item>
+<item historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="78" y="0"/>
+</item>
+<item historyLabel="lcd.cpp" index="4">
+<position info="not_deleted" x="10336" y="0"/>
+</item>
+<item active="true" historyLabel="lab1.cpp" index="0">
+<position info="not_deleted" x="78" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -340,14 +354,20 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="utils.h" tooltip="C:/nburn/include/utils.h">
+<persistable path="C:\nburn\include\utils.h" project="Lab1"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="error_wrapper.cpp" tooltip="Lab1/error_wrapper.cpp">
+<persistable path="/Lab1/error_wrapper.cpp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.cpp" tooltip="Lab1/lcd.cpp">
+<persistable path="/Lab1/lcd.cpp"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="lab1.cpp" tooltip="Lab1/lab1.cpp">
 <persistable path="/Lab1/lab1.cpp"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.h" tooltip="Lab1/lcd.h">
 <persistable path="/Lab1/lcd.h"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.cpp" tooltip="Lab1/lcd.cpp">
-<persistable path="/Lab1/lcd.cpp"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ioboard.cpp" tooltip="Lab0/ioboard.cpp">
 <persistable path="/Lab0/ioboard.cpp"/>
