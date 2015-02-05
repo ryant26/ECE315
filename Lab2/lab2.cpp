@@ -97,5 +97,16 @@ INTERRUPT(out_irq_pin_isr, 0x2500){
  * The documentation on the edge port module will contain the information
  * on how to signal to the processor that it should return to normal processing.
  */
-void IRQIntInit(void) {
+long printToScreen(){
+	iprintf("In sub routine");
 }
+
+void IRQIntInit(void) {
+	sim.eport.eppar |= 0x40;
+	sim.eport.epddr &= 0xff3f;
+	sim.eport.epier |= 0x8;
+
+	SetIntc(0, (long)&printToScreen, 3, 1, 1);
+}
+
+
