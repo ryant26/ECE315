@@ -28,10 +28,13 @@ and Nancy's keypad.
 
 	const char KeypadButtonMapText[BUTTONS] [MAX_BUTTON_NAME] =
 	{
-	"*", "*", "*", "*",
-	"*", "*", "*", "*",
-	"*", "*", "*", "*",
-	"*", "*", "*", "*"
+	// Keypad mapped from A-D, 1-4 for Exercise3
+	// For Exercise 4, the four chosen keys labeled with
+	// first letter of direction
+	"1", "2", "3", "D",
+	"L", "6", "7", "U",
+	"9", "10", "11", "12",
+	"R", "14", "15", "16"
 	};
 
 /* Name:Keypad Constructor
