@@ -1,8 +1,7 @@
 #include "Cursor.h"
-#include "lcd.h"
 
 
-void Cursor::Cursor(unsigned char pos, unsigned char screen){
+Cursor::Cursor(unsigned char pos, unsigned char screen){
 	cursPos = pos;
 	currScreen = screen;
 }
