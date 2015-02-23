@@ -11,6 +11,7 @@
 #include "keypad.h"
 #include "lcd.h"
 #include <string.h>
+#include "Cursor.h"
 
 #define EPPAR_RISING_EDGE 	0x40
 #define EPDDR_INPUT 		0xff3f
@@ -33,80 +34,17 @@ extern "C" {
 const char * AppName="RT CH";
 
 Keypad  myKeypad;
-Lcd		myLCD;
+
 
 /* Instantiate your Queue objects here */
 OS_Q myQueue;
 void * myQueueStorage[NUM_ELEMENTS];
 
-unsigned char cursPos = 0;
-unsigned char currScreen = LCD_UPPER_SCR;
-
-// Moves cursor left, handles edges of screens
-void moveLeft(){
-	if (cursPos == UPPER_LEFT) {
-		if (currScreen == LCD_UPPER_SCR) {
-			currScreen = LCD_LOWER_SCR;
-			cursPos = LOWER_RIGHT;
-		} else if (currScreen == LCD_LOWER_SCR) {
-			currScreen = LCD_UPPER_SCR;
-			cursPos = LOWER_RIGHT;
-		}
-	} else {
-		cursPos -= 1;
-	}
-}
-
-// Moves cursor right, handles edges of screens
-void moveRight(){
-	if (cursPos == LOWER_RIGHT) {
-		if (currScreen == LCD_UPPER_SCR) {
-			currScreen = LCD_LOWER_SCR;
-			cursPos = UPPER_LEFT;
-		} else if (currScreen == LCD_LOWER_SCR) {
-			currScreen = LCD_UPPER_SCR;
-			cursPos = UPPER_LEFT;
-		}
-	} else {
-		cursPos += 1;
-	}
-}
-
-// Moves cursor up, handles edges of screens
-void moveUp(){
-	if ((cursPos >= UPPER_LEFT) && (cursPos <= UPPER_RIGHT)) {
-		if (currScreen == LCD_UPPER_SCR) {
-			currScreen = LCD_LOWER_SCR;
-			cursPos += ONE_LINE;
-		} else if (currScreen == LCD_LOWER_SCR) {
-			currScreen = LCD_UPPER_SCR;
-			cursPos += ONE_LINE;
-		}
-	} else {
-		cursPos -= ONE_LINE;
-	}
-}
-
-// Moves cursor down, handles edges of screens
-void moveDown(){
-	if ((cursPos >= LOWER_LEFT) && (cursPos <= LOWER_RIGHT)) {
-		if (currScreen == LCD_UPPER_SCR) {
-			currScreen = LCD_LOWER_SCR;
-			cursPos -= ONE_LINE;
-		} else if (currScreen == LCD_LOWER_SCR) {
-			currScreen = LCD_UPPER_SCR;
-			cursPos -= ONE_LINE;
-		}
-	} else {
-		cursPos += ONE_LINE;
-	}
-}
-
-
 
 void UserMain(void * pd) {
 	BYTE err = OS_NO_ERR;
-
+	Lcd	myLCD;
+	Cursor cursor (0, LCD_LOWER_SCR);
 	InitializeStack();
 	OSChangePrio(MAIN_PRIO);
 	EnableAutoUpdate();
@@ -140,23 +78,23 @@ void UserMain(void * pd) {
 		iprintf((char*)msg);
 		switch((*(char*)msg)) {
 		case 'U':
-			moveUp();
+			cursor.moveUp();
 			iprintf("Up");
 			break;
 		case 'D':
-			moveDown();
+			cursor.moveDown();
 			iprintf("Down");
 			break;
 		case 'L':
-			moveLeft();
+			cursor.moveLeft();
 			break;
 		case 'R':
-			moveRight();
+			cursor.moveRight();
 			break;
 		}
 		myLCD.Clear(LCD_BOTH_SCR);
-		myLCD.MoveCursor(currScreen, cursPos);
-		myLCD.PrintChar(currScreen, 'A');
+		myLCD.MoveCursor(cursor.currScreen, cursor.cursPos);
+		myLCD.PrintChar(cursor.currScreen, 'A');
 
 
 

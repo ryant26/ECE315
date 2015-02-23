@@ -6,6 +6,11 @@ Cursor::Cursor(unsigned char pos, unsigned char screen){
 	currScreen = screen;
 }
 
+/* Name: moveLeft
+ * Description: moves the cursor position left and handles wrapping
+ * Inputs: none
+ * Outputs: none
+ */
 void Cursor::moveLeft(){
 	if (cursPos == UPPER_LEFT) {
 		if (currScreen == LCD_UPPER_SCR) {
@@ -20,6 +25,11 @@ void Cursor::moveLeft(){
 	}
 }
 
+/* Name: moveRight
+ * Description: moves the cursor position right and handles wrapping
+ * Inputs: none
+ * Outputs: none
+ */
 void Cursor::moveRight(){
 	if (cursPos == LOWER_RIGHT) {
 		if (currScreen == LCD_UPPER_SCR) {
@@ -34,6 +44,11 @@ void Cursor::moveRight(){
 	}
 }
 
+/* Name: moveUp
+ * Description: moves the cursor position up and handles wrapping
+ * Inputs: none
+ * Outputs: none
+ */
 void Cursor::moveUp(){
 	if ((cursPos >= UPPER_LEFT) && (cursPos <= UPPER_RIGHT)) {
 		if (currScreen == LCD_UPPER_SCR) {
@@ -48,7 +63,11 @@ void Cursor::moveUp(){
 	}
 }
 
-
+/* Name: moveDown
+ * Description: moves the cursor position down and handles wrapping
+ * Inputs: none
+ * Outputs: none
+ */
 void Cursor::moveDown(){
 	if ((cursPos >= LOWER_LEFT) && (cursPos <= LOWER_RIGHT)) {
 		if (currScreen == LCD_UPPER_SCR) {
