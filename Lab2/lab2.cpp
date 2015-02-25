@@ -25,6 +25,12 @@
 #define LOWER_LEFT			40
 #define ONE_LINE			40
 
+#define INTCTRL0			0
+#define IRQ3				3
+#define INTLVL1				1
+#define PRILVL1				1
+
+
 extern "C" {
 	void UserMain(void * pd);
 	void IRQIntInit(void);
@@ -34,6 +40,7 @@ extern "C" {
 const char * AppName="RT CH";
 
 Keypad  myKeypad;
+Lcd	myLCD;
 
 
 /* Instantiate your Queue objects here */
@@ -43,7 +50,7 @@ void * myQueueStorage[NUM_ELEMENTS];
 
 void UserMain(void * pd) {
 	BYTE err = OS_NO_ERR;
-	Lcd	myLCD;
+
 	Cursor cursor (0, LCD_LOWER_SCR);
 	InitializeStack();
 	OSChangePrio(MAIN_PRIO);
@@ -101,7 +108,6 @@ void UserMain(void * pd) {
 		/* You may also choose to do a quick poll of the Data Avail line
 		 * of the encoder to convince yourself that the keypad encoder works.
 		 */
-		//OSTimeDly(TICKS_PER_SECOND*100);
 	}
 }
 
@@ -115,10 +121,8 @@ void UserMain(void * pd) {
  * are listed there as well */
 
 INTERRUPT(out_irq_pin_isr, 0x2500){
-	//iprintf("Button pressed");
 	sim.eport.epfr |= EPFR_SET;
-	display_error("Queue Full when trying to pend" , OSQPost(&myQueue, (void*)myKeypad.GetNewButtonString()));
-
+	OSQPost(&myQueue, (void*)myKeypad.GetNewButtonString());
 }
 
 /* The registers that you need to initialise to get
@@ -151,7 +155,7 @@ void IRQIntInit(void) {
 	sim.eport.epddr &= EPDDR_INPUT;
 	sim.eport.epier |= EPIER_ENABLED;
 
-	SetIntc(0, (long)out_irq_pin_isr, 3, 1, 1);
+	SetIntc(INTCTRL0, (long)out_irq_pin_isr, IRQ3, INTLVL1, PRILVL1);
 }
 
 
