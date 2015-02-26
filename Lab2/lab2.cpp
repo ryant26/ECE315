@@ -26,7 +26,7 @@
 #define ONE_LINE			40
 
 #define INTCTRL0			0
-#define IRQ3				3
+#define IRQVECTOR			3
 #define INTLVL1				1
 #define PRILVL1				1
 
@@ -155,7 +155,7 @@ void IRQIntInit(void) {
 	sim.eport.epddr &= EPDDR_INPUT;
 	sim.eport.epier |= EPIER_ENABLED;
 
-	SetIntc(INTCTRL0, (long)out_irq_pin_isr, IRQ3, INTLVL1, PRILVL1);
+	SetIntc(INTCTRL0, (long)out_irq_pin_isr, IRQVECTOR, INTLVL1, PRILVL1);
 }
 
 
