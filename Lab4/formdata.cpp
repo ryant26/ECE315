@@ -21,9 +21,10 @@ extern BYTE display_error(const char * info, BYTE error);
  * Inputs: 	none
  * Outputs: none
  */
-FormData::FormData() {
+FormData::FormData(OS_SEM * sem) {
 	// TODO Auto-generated constructor stub
-	display_error("Error initializing mySem", OSSemInit (&mySem, 1));
+	//************ TRAP IN HERE********************
+	mySem = *sem;
 	minrpm_valid = true;
 	maxrpm_valid = true;
 	rot_valid = true;
@@ -46,16 +47,16 @@ FormData::~FormData() {
  * Outputs:
  */
 BYTE FormData::SetMaxRPM(char * rpm) {
-	display_error("Error pending on semaphore in SetMaxRPM", OSSemPend(&mySem, 0));
-	int check_maxrpm = atoi(rpm);
-	if (check_maxrpm <= 0 || check_maxrpm > 200) {
-		maxrpm_valid = false;
-		return FORM_ERROR;
-	}
-	int_maxrpm = check_maxrpm;
-	maxrpm_valid = true;
-	display_error("Error posting to semaphore in SetMaxRPM", OSSemPost(&mySem));
-	return FORM_OK;
+//	display_error("Error pending on semaphore in SetMaxRPM", OSSemPend(&mySem, 0));
+//	int check_maxrpm = atoi(rpm);
+//	if (check_maxrpm <= 0 || check_maxrpm > 200) {
+//		maxrpm_valid = false;
+//		return FORM_ERROR;
+//	}
+//	int_maxrpm = check_maxrpm;
+//	maxrpm_valid = true;
+//	display_error("Error posting to semaphore in SetMaxRPM", OSSemPost(&mySem));
+//	return FORM_OK;
 }
 /* Name:
  * Description:
@@ -73,16 +74,16 @@ int  FormData::GetMaxRPM(void){
  * Outputs:
  */
 BYTE FormData::SetMinRPM(char * rpm) {
-	display_error("Error pending on semaphore in SetMinRPM", OSSemPend(&mySem, 0));
-	int check_minrpm = atoi(rpm);
-	if (check_minrpm <= 0 || check_minrpm < int_maxrpm) {
-		minrpm_valid = false;
-		return FORM_ERROR;
-	}
-	int_minrpm = check_minrpm;
-	minrpm_valid = true;
-	display_error("Error posting to semaphore in SetMinRPM", OSSemPost(&mySem));
-	return FORM_OK;
+//	display_error("Error pending on semaphore in SetMinRPM", OSSemPend(&mySem, 0));
+//	int check_minrpm = atoi(rpm);
+//	if (check_minrpm <= 0 || check_minrpm < int_maxrpm) {
+//		minrpm_valid = false;
+//		return FORM_ERROR;
+//	}
+//	int_minrpm = check_minrpm;
+//	minrpm_valid = true;
+//	display_error("Error posting to semaphore in SetMinRPM", OSSemPost(&mySem));
+//	return FORM_OK;
 }
 
 /* Name:
@@ -122,16 +123,16 @@ int FormData::GetSteps (void) {
  */
 
 BYTE FormData::SetRotations(char * rot) {
-	display_error("Error pending on semaphore in SetRotations", OSSemPend(&mySem, 0));
-	int check_rotations = atoi(rot);
-	if (check_rotations <= 0 || check_rotations > 10000) {
-		rot_valid = false;
-		return FORM_ERROR;
-	}
-	int_rotations = check_rotations;
-	rot_valid = true;
-	display_error("Error posting to semaphore in SetRotations", OSSemPost(&mySem));
-	return FORM_OK;
+//	display_error("Error pending on semaphore in SetRotations", OSSemPend(&mySem, 0));
+//	int check_rotations = atoi(rot);
+//	if (check_rotations <= 0 || check_rotations > 10000) {
+//		rot_valid = false;
+//		return FORM_ERROR;
+//	}
+//	int_rotations = check_rotations;
+//	rot_valid = true;
+//	display_error("Error posting to semaphore in SetRotations", OSSemPost(&mySem));
+//	return FORM_OK;
 }
 
 /* Name:
@@ -149,18 +150,18 @@ int  FormData::GetRotations(void){
  * Outputs:
  */
 BYTE FormData::SetDirection(char * dir){
-	display_error("Error pending on semaphore in SetDirection", OSSemPend(&mySem, 0));
-	if (strncmp(dir, "Clockwise", 11) == 0) { //arbitrary max string compare size
-		direction = CW;
-	} else if (strncmp(dir, "Counter-Clockwise",20) == 0 ) { //arbitrary max string compare size
-		direction = CCW;
-	} else {
-		dir_valid = false;
-		return FORM_ERROR;
-	}
-	dir_valid = true;
-	display_error("Error posting to semaphore in SetDirection", OSSemPost(&mySem));
-	return FORM_OK;
+//	display_error("Error pending on semaphore in SetDirection", OSSemPend(&mySem, 0));
+//	if (strncmp(dir, "Clockwise", 11) == 0) { //arbitrary max string compare size
+//		direction = CW;
+//	} else if (strncmp(dir, "Counter-Clockwise",20) == 0 ) { //arbitrary max string compare size
+//		direction = CCW;
+//	} else {
+//		dir_valid = false;
+//		return FORM_ERROR;
+//	}
+//	dir_valid = true;
+//	display_error("Error posting to semaphore in SetDirection", OSSemPost(&mySem));
+//	return FORM_OK;
 }
 
 /* Name:

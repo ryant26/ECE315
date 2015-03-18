@@ -24,7 +24,7 @@ enum dir { 	UNSET = 0,
 
 class FormData {
 public:
-	FormData();
+	FormData(OS_SEM *);
 	virtual ~FormData();
 	BYTE SetMaxRPM(char * rpm);
 	int  GetMaxRPM(void);
@@ -42,6 +42,8 @@ public:
 	bool IsMaxRPMValid(void);
 	bool IsRotationsValid(void);
 	bool IsDirectionValid(void);
+
+
 private:
 	int  int_maxrpm;
 	int  int_minrpm;

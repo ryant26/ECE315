@@ -130,12 +130,12 @@ extern FormData myData;
 extern OS_SEM form_sem;
 
 void CheckExtractResult(char* buffer, int buf_size, char *pData, char* name, char* err) {
-	int result = ExtractPostData( "minrpm", pData, buffer , buf_size);
-	if (result == -1) {
-		iprintf("Field not found. %s", err);
-	} else if (result == 0) {
-		iprintf("No value in field. %s", err);
-	}
+//	int result = ExtractPostData( "minrpm", pData, buffer , buf_size);
+//	if (result == -1) {
+//		iprintf("Field not found. %s", err);
+//	} else if (result == 0) {
+//		iprintf("No value in field. %s", err);
+//	}
 }
 
 
@@ -158,16 +158,16 @@ void CheckExtractResult(char* buffer, int buf_size, char *pData, char* name, cha
 int MyDoPost( int sock, char *url, char *pData, char *rxBuffer )
 {
 	// Insert your post request handling here
-	int buf_size = 20;  // arbitrary buffer size
-	char buffer[buf_size];
-	CheckExtractResult(buffer, buf_size, pData, "minrpm", "Error on minprm");
-	myData.SetMinRPM(buffer);
-	CheckExtractResult(buffer, buf_size, pData, "maxrpm", "Error on maxprm");
-	myData.SetMaxRPM(buffer);
-	CheckExtractResult(buffer, buf_size, pData, "rotations", "Error on rotations");
-	myData.SetRotations(buffer);
-	CheckExtractResult(buffer, buf_size, pData, "direction", "Error on direction");
-	myData.SetDirection(buffer);
+//	int buf_size = 20;  // arbitrary buffer size
+//	char buffer[buf_size];
+//	CheckExtractResult(buffer, buf_size, pData, "minrpm", "Error on minprm");
+//	myData.SetMinRPM(buffer);
+//	CheckExtractResult(buffer, buf_size, pData, "maxrpm", "Error on maxprm");
+//	myData.SetMaxRPM(buffer);
+//	CheckExtractResult(buffer, buf_size, pData, "rotations", "Error on rotations");
+//	myData.SetRotations(buffer);
+//	CheckExtractResult(buffer, buf_size, pData, "direction", "Error on direction");
+//	myData.SetDirection(buffer);
 
    // We have to respond to the post with a new HTML page...
    // In this case we will redirect so the browser will

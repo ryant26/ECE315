@@ -54,6 +54,7 @@ extern "C"
 	void ValidateDirectionImage (int sock, PCSTR url);
 }
 
+extern BYTE display_error(const char * info, BYTE error);
 extern void RegisterPost();
 
 #define MAX_COUNTER_BUFFER_LENGTH 100
@@ -62,8 +63,9 @@ char valid_imgstring[] = "<img source=\"hello\" width = 40 height = 40</img>";
 char invalid_imgstring[] = "<img source=\"hello\" width = 40 height = 40</img>";
 
 
-FormData myData;
+
 OS_SEM form_sem;
+FormData myData(&form_sem);
 
 void UserMain( void *pd )
 {
@@ -76,6 +78,7 @@ void UserMain( void *pd )
 	//Call a registration function for our form code
 	// so POST requests are handled properly.
 	RegisterPost();
+	display_error("Error initializing semaphor", OSSemInit(&form_sem, 1));
 
 	// Insert your code that queries the DIP switches and
 	// initialises the motor mode accordingly here.
