@@ -52,6 +52,7 @@ extern "C"
 	void ValidateMaxRPMImage (int sock, PCSTR url);
 	void ValidateRotationImage (int sock, PCSTR url);
 	void ValidateDirectionImage (int sock, PCSTR url);
+	void DisplayMotorMode (int sock, PCSTR url);
 }
 
 extern BYTE display_error(const char * info, BYTE error);
@@ -59,8 +60,8 @@ extern void RegisterPost();
 
 #define MAX_COUNTER_BUFFER_LENGTH 100
 
-char valid_imgstring[] = "<img source=\"hello\" width = 40 height = 40</img>";
-char invalid_imgstring[] = "<img source=\"hello\" width = 40 height = 40</img>";
+char valid_imgstring[] = "<img src=\"http://www.veryicon.com/icon/png/Movie%20%26%20TV/Looney%20Tunes/Bugs%20Bunny%20Carrot.png\" width = 40 height = 40</img>";
+char invalid_imgstring[] = "<img src=\"http://www.veryicon.com/icon/png/Movie%20%26%20TV/Looney%20Tunes/Elmer%20Fudd%20Hunting.png\" width = 40 height = 40</img>";
 
 
 
@@ -78,7 +79,7 @@ void UserMain( void *pd )
 	//Call a registration function for our form code
 	// so POST requests are handled properly.
 	RegisterPost();
-	display_error("Error initializing semaphor", OSSemInit(&form_sem, 1));
+	display_error("Error initializing semaphore", OSSemInit(&form_sem, 1));
 
 	// Insert your code that queries the DIP switches and
 	// initialises the motor mode accordingly here.
@@ -148,6 +149,14 @@ void ValidateDirectionImage (int sock, PCSTR url)
 		writestring(sock, (const char *)valid_imgstring);
 	} else {
 		writestring(sock, (const char *)invalid_imgstring);
+	}
+}
+
+void DisplayMotorMode (int sock, PCSTR url){
+	if (!getdipsw()){
+		writestring(sock, "Full Step");
+	} else {
+		writestring(sock, "Half Step");
 	}
 }
 

@@ -42,7 +42,7 @@ public:
 	bool IsMaxRPMValid(void);
 	bool IsRotationsValid(void);
 	bool IsDirectionValid(void);
-
+	bool checkNumericString(char *);
 
 private:
 	int  int_maxrpm;
@@ -51,7 +51,7 @@ private:
 	int	 int_rotations;
 	BYTE direction;
 	BYTE mode;
-	OS_SEM mySem;
+	OS_SEM *mySem;
 	bool minrpm_valid;
 	bool maxrpm_valid;
 	bool rot_valid;

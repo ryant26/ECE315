@@ -10,7 +10,7 @@
 	<table border ="1">
 	<tr>
 	<th width = "200" colspan = "6">
-	<b>ECE 315 Full Step Motor Controller</b>
+	<b>ECE 315 <!--FUNCTIONCALL DisplayMotorMode --> Motor Controller</b>
 	</th>
 	</tr>
 	<tr height = "100" >
@@ -22,17 +22,15 @@
 	</th>
 	<th width = "200" colspan = "3">
 	<align="left">MAX RPM<br></align>
-	<!--FUNCTIONCALL ValidateMaxRPMImage -->
 	<input type="text" name = "maxrpm">
-	<br>
+	<!--FUNCTIONCALL ValidateMaxRPMImage -->
 	</th>
 	</tr>
 	<tr height = "100">
 	<th width= "200" colspan = "3">
 	<align="left">Rotations<br></align>
-	<!--FUNCTIONCALL ValidateRotationImage -->
 	<input type="text" name = "rotations">
-	<br>
+	<!--FUNCTIONCALL ValidateRotationImage -->
 	</th>
 	<th width= "200" colspan = "3">
 	Direction<br>
@@ -40,6 +38,7 @@
 		<option>Clockwise</option>
 		<option>Counter-Clockwise</option>
 	</select>
+	<br>
 	<!--FUNCTIONCALL ValidateDirectionImage -->
 	</th>
 	</tr>
