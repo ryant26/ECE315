@@ -65,21 +65,22 @@ char invalid_imgstring[] = "<img src=\"http://www.veryicon.com/icon/png/Movie%20
 
 
 
-OS_SEM form_sem;
-FormData myData(&form_sem);
+
+FormData myData;
 
 void UserMain( void *pd )
 {
 	InitializeStack();
 	OSChangePrio( MAIN_PRIO );
 	EnableAutoUpdate();
+	myData.Init(0);
 	StartHTTP();
 	EnableTaskMonitor();
 
 	//Call a registration function for our form code
 	// so POST requests are handled properly.
 	RegisterPost();
-	display_error("Error initializing semaphore", OSSemInit(&form_sem, 1));
+
 
 	// Insert your code that queries the DIP switches and
 	// initialises the motor mode accordingly here.

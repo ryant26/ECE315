@@ -27,8 +27,7 @@ extern BYTE display_error(const char * info, BYTE error);
  * Inputs: 	none
  * Outputs: none
  */
-FormData::FormData(OS_SEM * sem) {
-	mySem = sem;
+FormData::FormData() {
 	minrpm_valid = true;
 	maxrpm_valid = true;
 	rot_valid = true;
@@ -51,19 +50,19 @@ FormData::~FormData() {
  * Outputs:
  */
 BYTE FormData::SetMaxRPM(char * rpm) {
-	display_error("Error pending on semaphore in SetMaxRPM", OSSemPend(mySem, NO_TIMEOUT));
+	display_error("Error pending on semaphore in SetMaxRPM", OSSemPend(&mySem, NO_TIMEOUT));
 	int check_maxrpm = 0;
 		if (checkNumericString(rpm)) {
 			check_maxrpm = atoi(rpm);
 		}
 	if (check_maxrpm < MIN_RPM_LIMIT || check_maxrpm > MAX_RPM_LIMIT) {
 		maxrpm_valid = false;
-		display_error("Error posting to semaphore in SetMaxRPM", OSSemPost(mySem));
+		display_error("Error posting to semaphore in SetMaxRPM", OSSemPost(&mySem));
 		return FORM_ERROR;
 	}
 	int_maxrpm = check_maxrpm;
 	maxrpm_valid = true;
-	display_error("Error posting to semaphore in SetMaxRPM", OSSemPost(mySem));
+	display_error("Error posting to semaphore in SetMaxRPM", OSSemPost(&mySem));
 	return FORM_OK;
 }
 /* Name:
@@ -82,19 +81,19 @@ int  FormData::GetMaxRPM(void){
  * Outputs:
  */
 BYTE FormData::SetMinRPM(char * rpm) {
-	display_error("Error pending on semaphore in SetMinRPM", OSSemPend(mySem, NO_TIMEOUT));
+	display_error("Error pending on semaphore in SetMinRPM", OSSemPend(&mySem, NO_TIMEOUT));
 	int check_minrpm = 0;
 	if (checkNumericString(rpm)) {
 		check_minrpm = atoi(rpm);
 	}
 	if (check_minrpm < MIN_RPM_LIMIT || check_minrpm > int_maxrpm) {
 		minrpm_valid = false;
-		display_error("Error posting to semaphore in SetMinRPM", OSSemPost(mySem));
+		display_error("Error posting to semaphore in SetMinRPM", OSSemPost(&mySem));
 		return FORM_ERROR;
 	}
 	int_minrpm = check_minrpm;
 	minrpm_valid = true;
-	display_error("Error posting to semaphore in SetMinRPM", OSSemPost(mySem));
+	display_error("Error posting to semaphore in SetMinRPM", OSSemPost(&mySem));
 	return FORM_OK;
 }
 
@@ -135,19 +134,19 @@ int FormData::GetSteps (void) {
  */
 
 BYTE FormData::SetRotations(char * rot) {
-	display_error("Error pending on semaphore in SetRotations", OSSemPend(mySem, 0));
+	display_error("Error pending on semaphore in SetRotations", OSSemPend(&mySem, 0));
 	int check_rotations = 0;
 	if (checkNumericString(rot)){
 		check_rotations = atoi(rot);
 	}
 	if (check_rotations < MIN_ROT_LIMIT || check_rotations > MAX_ROT_LIMIT) {
 		rot_valid = false;
-		display_error("Error posting to semaphore in SetRotations", OSSemPost(mySem));
+		display_error("Error posting to semaphore in SetRotations", OSSemPost(&mySem));
 		return FORM_ERROR;
 	}
 	int_rotations = check_rotations;
 	rot_valid = true;
-	display_error("Error posting to semaphore in SetRotations", OSSemPost(mySem));
+	display_error("Error posting to semaphore in SetRotations", OSSemPost(&mySem));
 	return FORM_OK;
 }
 
@@ -168,18 +167,18 @@ int  FormData::GetRotations(void){
 BYTE FormData::SetDirection(char * dir){
 	char* clockwise = "Clockwise";
 	char* counterclockwise = "Counter-Clockwise";
-	display_error("Error pending on semaphore in SetDirection", OSSemPend(mySem, 0));
+	display_error("Error pending on semaphore in SetDirection", OSSemPend(&mySem, 0));
 	if (strncmp(dir, clockwise , strlen(clockwise)) == 0) { //arbitrary max string compare size
 		direction = CW;
 	} else if (strncmp(dir, counterclockwise, strlen(counterclockwise)) == 0 ) { //arbitrary max string compare size
 		direction = CCW;
 	} else {
 		dir_valid = false;
-		display_error("Error posting to semaphore in SetDirection", OSSemPost(mySem));
+		display_error("Error posting to semaphore in SetDirection", OSSemPost(&mySem));
 		return FORM_ERROR;
 	}
 	dir_valid = true;
-	display_error("Error posting to semaphore in SetDirection", OSSemPost(mySem));
+	display_error("Error posting to semaphore in SetDirection", OSSemPost(&mySem));
 	return FORM_OK;
 }
 
@@ -213,6 +212,7 @@ BYTE FormData::Init(BYTE motor_mode){
 	int_minrpm = 0;
 	int_steps = 0;
 	int_rotations = 0;
+	display_error("Error initializing semaphore", OSSemInit(&mySem, 1));
 	return FORM_OK;
 }
 
@@ -232,14 +232,15 @@ bool FormData::IsDirectionValid(void){
 bool FormData::checkNumericString(char * str){
 	char * pch;
 	int i = 0;
+	// Checking for letter characters in input
 	for (uint j =0; j < strlen(str); j++) {
 		if(isalpha(str[j])) {
 			iprintf("Found a letter\n");
 			return false;
 		}
 	}
+	// Checking for white space between inputs
 	pch = strtok(str, " .");
-	char *first_tok = pch;
 	while(pch != NULL){
 		i++;
 		if (i > 1){
