@@ -173,9 +173,6 @@ int MyDoPost( int sock, char *url, char *pData, char *rxBuffer )
 
 	CheckExtractResult(buffer, buf_size, pData, "minrpm", "Error on minrpm");
 	myData.SetMinRPM(buffer);
-	iprintf("==================\n");
-	iprintf("%s\n", buffer);
-	iprintf("==================\n");
 	memset(buffer, 0, buf_size * sizeof(char));
 
 	CheckExtractResult(buffer, buf_size, pData, "rotations", "Error on rotations");

@@ -65,14 +65,16 @@ BYTE FormData::SetMaxRPM(char * rpm) {
 	display_error("Error posting to semaphore in SetMaxRPM", OSSemPost(&mySem));
 	return FORM_OK;
 }
-/* Name:
- * Description:
+/* Name: GetMaxRPM
+ * Description:	Returns the max RPM for the stepper motor
  * Inputs:
  * Outputs:
  */
 int  FormData::GetMaxRPM(void){
-
-	return int_maxrpm;
+	display_error("Error pending on semaphore in GetMaxRPM", OSSemPend(&mySem, 0));
+	int copy_maxrpm = int_maxrpm;
+	display_error("Error posting to semaphore in GetMaxRPM", OSSemPost(&mySem));
+	return copy_maxrpm;
 }
 
 /* Name:
@@ -103,7 +105,10 @@ BYTE FormData::SetMinRPM(char * rpm) {
  * Outputs:
  */
 int  FormData::GetMinRPM(void) {
-	return int_minrpm;
+	display_error("Error pending on semaphore in GetMinRPM", OSSemPend(&mySem, 0));
+	int copy_minrpm = int_minrpm;
+	display_error("Error posting to semaphore in GetMinRPM", OSSemPost(&mySem));
+	return copy_minrpm;
 }
 
 /* Name:
@@ -112,9 +117,7 @@ int  FormData::GetMinRPM(void) {
  * Outputs:
  */
 BYTE FormData::SetSteps(char * steps) {
-	//	display_error("Error pending on semaphore in SetSteps", OSSemPend(&mySem, 0));
-	//	int_steps = atoi(steps);
-	//	display_error("Error posting to semaphore in SetSteps", OSSemPost(&mySem));
+	// Not used in lab 4. No Semaphore for constant
 	return FORM_OK;
 }
 
@@ -124,7 +127,10 @@ BYTE FormData::SetSteps(char * steps) {
  * Outputs:
  */
 int FormData::GetSteps (void) {
-	return int_steps;
+	display_error("Error pending on semaphore in GetSteps", OSSemPend(&mySem, 0));
+	int copy_steps = int_steps;
+	display_error("Error posting to semaphore in GetSteps", OSSemPost(&mySem));
+	return copy_steps;
 }
 
 /* Name:
@@ -156,7 +162,10 @@ BYTE FormData::SetRotations(char * rot) {
  * Outputs:
  */
 int  FormData::GetRotations(void){
-	return int_rotations;
+	display_error("Error pending on semaphore in GetRotations", OSSemPend(&mySem, 0));
+	int copy_rotations = int_rotations;
+	display_error("Error posting to semaphore in GetRotations", OSSemPost(&mySem));
+	return copy_rotations;
 }
 
 /* Name:
@@ -188,7 +197,10 @@ BYTE FormData::SetDirection(char * dir){
  * Outputs:
  */
 BYTE FormData::GetDirection(void){
-	return direction;
+	display_error("Error pending on semaphore in GetDirection", OSSemPend(&mySem, 0));
+	BYTE copy_direction = direction;
+	display_error("Error posting to semaphore in GetDirection", OSSemPost(&mySem));
+	return copy_direction;
 }
 
 /* Name:
@@ -197,7 +209,10 @@ BYTE FormData::GetDirection(void){
  * Outputs:
  */
 BYTE FormData::GetMode(void){
-	return mode;
+	display_error("Error pending on semaphore in GetMode", OSSemPend(&mySem, 0));
+	BYTE copy_mode = mode;
+	display_error("Error posting to semaphore in GetMode", OSSemPost(&mySem));
+	return copy_mode;
 }
 
 /* Name:
@@ -217,16 +232,29 @@ BYTE FormData::Init(BYTE motor_mode){
 }
 
 bool FormData::IsMinRPMValid(void) {
-	return minrpm_valid;
+	display_error("Error pending on semaphore in IsMinRPMValid", OSSemPend(&mySem, 0));
+	bool copy_minrpm_valid = minrpm_valid;
+	display_error("Error posting to semaphore in IsMinRPMValid", OSSemPost(&mySem));
+	return copy_minrpm_valid;
 }
 bool FormData::IsMaxRPMValid(void){
-	return maxrpm_valid;
+	display_error("Error pending on semaphore in IsMaxRPMValid", OSSemPend(&mySem, 0));
+	bool copy_maxrpm_valid = maxrpm_valid;
+	display_error("Error posting to semaphore in IsMinRPMValid", OSSemPost(&mySem));
+	return copy_maxrpm_valid;
 }
 bool FormData::IsRotationsValid(void){
-	return rot_valid;;
+	display_error("Error pending on semaphore in IsRotationsValid", OSSemPend(&mySem, 0));
+	bool copy_rot_valid = rot_valid;
+	display_error("Error posting to semaphore in IsRotationsValid", OSSemPost(&mySem));
+	return copy_rot_valid;
+
 }
 bool FormData::IsDirectionValid(void){
-	return dir_valid;
+	display_error("Error pending on semaphore in IsDirectionValid", OSSemPend(&mySem, 0));
+	bool copy_dir_valid = dir_valid;
+	display_error("Error posting to semaphore in IsDirectionValid", OSSemPost(&mySem));
+	return copy_dir_valid;
 }
 
 bool FormData::checkNumericString(char * str){
@@ -235,7 +263,6 @@ bool FormData::checkNumericString(char * str){
 	// Checking for letter characters in input
 	for (uint j =0; j < strlen(str); j++) {
 		if(isalpha(str[j])) {
-			iprintf("Found a letter\n");
 			return false;
 		}
 	}
@@ -244,7 +271,6 @@ bool FormData::checkNumericString(char * str){
 	while(pch != NULL){
 		i++;
 		if (i > 1){
-			iprintf("more than one tok");
 			return false;
 		}
 		pch = strtok(NULL, " .");

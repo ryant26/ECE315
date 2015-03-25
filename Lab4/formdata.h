@@ -42,7 +42,7 @@ public:
 	bool IsMaxRPMValid(void);
 	bool IsRotationsValid(void);
 	bool IsDirectionValid(void);
-	bool checkNumericString(char *);
+
 
 private:
 	int  int_maxrpm;
@@ -56,6 +56,7 @@ private:
 	bool maxrpm_valid;
 	bool rot_valid;
 	bool dir_valid;
+	bool checkNumericString(char *);
 };
 
 #endif /* FORMDATA_H_ */

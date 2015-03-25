@@ -73,7 +73,7 @@ void UserMain( void *pd )
 	InitializeStack();
 	OSChangePrio( MAIN_PRIO );
 	EnableAutoUpdate();
-	myData.Init(0);
+	myData.Init(0);	//0 because unused in lab 4
 	StartHTTP();
 	EnableTaskMonitor();
 
