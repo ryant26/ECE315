@@ -49,6 +49,11 @@ extern "C"
 {
    void UserMain( void *pd );
    void DisplayLameCounter( int sock, PCSTR url );
+   void ValidateMinRPMImage (int sock, PCSTR url);
+   void ValidateMaxRPMImage (int sock, PCSTR url);
+   void ValidateRotationImage (int sock, PCSTR url);
+   void ValidateDirectionImage (int sock, PCSTR url);
+   void DisplayMotorMode (int sock, PCSTR url);
 }
 
 extern void RegisterPost();
@@ -58,7 +63,12 @@ OS_SEM form_sem;
 Keypad myKeypad;
 Lcd myLCD;
 Stepper myStepper(SM_MASTER_CHANNEL, SM_ACCEL_TABLE_SIZE);
+
 #define MAX_COUNTER_BUFFER_LENGTH 100
+
+char valid_imgstring[] = "<img src=\"http://www.veryicon.com/icon/png/Movie%20%26%20TV/Looney%20Tunes/Bugs%20Bunny%20Carrot.png\" width = 40 height = 40</img>";
+char invalid_imgstring[] = "<img src=\"http://www.veryicon.com/icon/png/Movie%20%26%20TV/Looney%20Tunes/Elmer%20Fudd%20Hunting.png\" width = 40 height = 40</img>";
+
 
 
 void UserMain( void *pd )
@@ -69,7 +79,7 @@ void UserMain( void *pd )
 	EnableAutoUpdate();
 
 	eTPUInit();
-
+	myData.Init(0);
 	myLCD.Init(LCD_BOTH_SCR);
 	myKeypad.Init();
 
@@ -80,6 +90,8 @@ void UserMain( void *pd )
 	myStepper.Init(ECE315_ETPU_SM_FULL_STEP_MODE,
 						SM_MAX_PERIOD,
 						SM_INIT_SLEW_PERIOD);
+
+
 
 	StartHTTP();
 	EnableTaskMonitor();
@@ -94,6 +106,11 @@ void UserMain( void *pd )
 
 	while ( 1 )
 	{
+//		iprintf("Before getting min RPM\n");
+//		myStepper.SetStartPeriodUsingRPM(10);
+//		iprintf("Before getting max RPM\n");
+//		myStepper.SetSlewPeriodUsingRPM(10);
+//		iprintf("After getting max RPM\n");
 
 		myStepper.Step(100);// cw movement 100 steps = 1 rotation in full step mode
 		OSTimeDly(TICKS_PER_SECOND*3);
@@ -121,6 +138,55 @@ void DisplayLameCounter( int sock, PCSTR url )
 		form_counter++;
 		writestring(sock,(const char *) buffer);
 
+	}
+}
+
+/*
+ *
+ */
+void ValidateMinRPMImage (int sock, PCSTR url)
+{
+	if(myData.IsMinRPMValid()) {
+		writestring(sock, (const char *)valid_imgstring);
+		//iprintf("Set Start RMP: %d", myData.GetMinRPM());
+	} else {
+		writestring(sock, (const char *)invalid_imgstring);
+	}
+}
+
+void ValidateMaxRPMImage (int sock, PCSTR url)
+{
+	if(myData.IsMaxRPMValid()) {
+		writestring(sock, (const char *)valid_imgstring);
+		//iprintf("Set Slew RMP: %d", myData.GetMaxRPM());
+	} else {
+		writestring(sock, (const char *)invalid_imgstring);
+	}
+}
+
+void ValidateRotationImage (int sock, PCSTR url)
+{
+	if(myData.IsRotationsValid()) {
+		writestring(sock, (const char *)valid_imgstring);
+	} else {
+		writestring(sock, (const char *)invalid_imgstring);
+	}
+}
+
+void ValidateDirectionImage (int sock, PCSTR url)
+{
+	if(myData.IsDirectionValid()) {
+		writestring(sock, (const char *)valid_imgstring);
+	} else {
+		writestring(sock, (const char *)invalid_imgstring);
+	}
+}
+
+void DisplayMotorMode (int sock, PCSTR url){
+	if (!getdipsw()){
+		writestring(sock, "Full Step");
+	} else {
+		writestring(sock, "Half Step");
 	}
 }
 
