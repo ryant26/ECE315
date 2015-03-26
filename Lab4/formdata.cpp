@@ -44,10 +44,10 @@ FormData::~FormData() {
 
 }
 
-/* Name:
- * Description:
- * Inputs:
- * Outputs:
+/* Name: SetMaxRPM
+ * Description: setter for the max RPM of the stepper motor
+ * Inputs: char * rpm is the RPM to set as the max RPM
+ * Outputs: BYTE a form error or OK
  */
 BYTE FormData::SetMaxRPM(char * rpm) {
 	display_error("Error pending on semaphore in SetMaxRPM", OSSemPend(&mySem, NO_TIMEOUT));
@@ -68,7 +68,7 @@ BYTE FormData::SetMaxRPM(char * rpm) {
 /* Name: GetMaxRPM
  * Description:	Returns the max RPM for the stepper motor
  * Inputs:
- * Outputs:
+ * Outputs: int the max RPM
  */
 int  FormData::GetMaxRPM(void){
 	display_error("Error pending on semaphore in GetMaxRPM", OSSemPend(&mySem, 0));
@@ -77,10 +77,10 @@ int  FormData::GetMaxRPM(void){
 	return copy_maxrpm;
 }
 
-/* Name:
- * Description:
- * Inputs:
- * Outputs:
+/* Name: SetMinRPM
+ * Description: setter for the min RPM of the stepper motor
+ * Inputs: char * rpm is the RPM to set as the min RPM
+ * Outputs: BYTE a form error or OK
  */
 BYTE FormData::SetMinRPM(char * rpm) {
 	display_error("Error pending on semaphore in SetMinRPM", OSSemPend(&mySem, NO_TIMEOUT));
@@ -99,10 +99,10 @@ BYTE FormData::SetMinRPM(char * rpm) {
 	return FORM_OK;
 }
 
-/* Name:
- * Description:
+/* Name: GetMinRPM
+ * Description: Returns the min RPM for the stepper motor
  * Inputs:
- * Outputs:
+ * Outputs: int the min RPM
  */
 int  FormData::GetMinRPM(void) {
 	display_error("Error pending on semaphore in GetMinRPM", OSSemPend(&mySem, 0));
@@ -111,20 +111,20 @@ int  FormData::GetMinRPM(void) {
 	return copy_minrpm;
 }
 
-/* Name:
- * Description:
- * Inputs:
- * Outputs:
+/* Name: SetSteps
+ * Description: setter for the number of steps the motor should take
+ * Inputs: char * steps the number of steps
+ * Outputs: Byte form OK
  */
 BYTE FormData::SetSteps(char * steps) {
 	// Not used in lab 4. No Semaphore for constant
 	return FORM_OK;
 }
 
-/* Name:
- * Description:
+/* Name: GetSteps
+ * Description: Returns the the number of steps for the stepper motor
  * Inputs:
- * Outputs:
+ * Outputs: int the number of steps
  */
 int FormData::GetSteps (void) {
 	display_error("Error pending on semaphore in GetSteps", OSSemPend(&mySem, 0));
@@ -133,10 +133,10 @@ int FormData::GetSteps (void) {
 	return copy_steps;
 }
 
-/* Name:
- * Description:
- * Inputs:
- * Outputs:
+/* Name: SetRotations
+ * Description: setter for the number of rotations the motor should take
+ * Inputs:	char * rot the number of rotations
+ * Outputs: Byte Form OK or Form Error
  */
 
 BYTE FormData::SetRotations(char * rot) {
@@ -156,10 +156,10 @@ BYTE FormData::SetRotations(char * rot) {
 	return FORM_OK;
 }
 
-/* Name:
- * Description:
+/* Name: GetRotations
+ * Description: gets the number of rotations for the stepper motor
  * Inputs:
- * Outputs:
+ * Outputs: int number of rotations
  */
 int  FormData::GetRotations(void){
 	display_error("Error pending on semaphore in GetRotations", OSSemPend(&mySem, 0));
@@ -168,10 +168,10 @@ int  FormData::GetRotations(void){
 	return copy_rotations;
 }
 
-/* Name:
- * Description:
+/* Name: SetDirection
+ * Description: setter for the direction the motor should move
  * Inputs:
- * Outputs:
+ * Outputs: BYTE Form OK or Form Error
  */
 BYTE FormData::SetDirection(char * dir){
 	char* clockwise = "Clockwise";
@@ -179,7 +179,7 @@ BYTE FormData::SetDirection(char * dir){
 	display_error("Error pending on semaphore in SetDirection", OSSemPend(&mySem, 0));
 	if (strncmp(dir, clockwise , strlen(clockwise)) == 0) { //arbitrary max string compare size
 		direction = CW;
-	} else if (strncmp(dir, counterclockwise, strlen(counterclockwise)) == 0 ) { //arbitrary max string compare size
+	} else if (strncmp(dir, counterclockwise, strlen(counterclockwise)) == 0 ) { //0 is string compare match
 		direction = CCW;
 	} else {
 		dir_valid = false;
@@ -191,10 +191,10 @@ BYTE FormData::SetDirection(char * dir){
 	return FORM_OK;
 }
 
-/* Name:
- * Description:
+/* Name: GetDirection
+ * Description: gets the direction of movement for the stepper motor
  * Inputs:
- * Outputs:
+ * Outputs: BYTE direction
  */
 BYTE FormData::GetDirection(void){
 	display_error("Error pending on semaphore in GetDirection", OSSemPend(&mySem, 0));
@@ -203,10 +203,10 @@ BYTE FormData::GetDirection(void){
 	return copy_direction;
 }
 
-/* Name:
- * Description:
+/* Name: GetMode
+ * Description: getter for the mode of the stepper motor
  * Inputs:
- * Outputs:
+ * Outputs: BYTE mode
  */
 BYTE FormData::GetMode(void){
 	display_error("Error pending on semaphore in GetMode", OSSemPend(&mySem, 0));
@@ -215,10 +215,10 @@ BYTE FormData::GetMode(void){
 	return copy_mode;
 }
 
-/* Name:
- * Description:
- * Inputs:
- * Outputs:
+/* Name: Init
+ * Description: initilizer for this class, must be called prior to use
+ * Inputs: BYTE motor_mode the mode for the stepper motor
+ * Outputs: BYTE Form OK
  */
 BYTE FormData::Init(BYTE motor_mode){
 	direction = UNSET;
@@ -231,18 +231,35 @@ BYTE FormData::Init(BYTE motor_mode){
 	return FORM_OK;
 }
 
+/* Name: IsMinRPMValid
+ * Description: returns a boolean representing the valididty of last set MinRPMValue
+ * Inputs: 
+ * Outputs: Bool true if valid false otherwise
+ */
 bool FormData::IsMinRPMValid(void) {
 	display_error("Error pending on semaphore in IsMinRPMValid", OSSemPend(&mySem, 0));
 	bool copy_minrpm_valid = minrpm_valid;
 	display_error("Error posting to semaphore in IsMinRPMValid", OSSemPost(&mySem));
 	return copy_minrpm_valid;
 }
+
+/* Name: IsMaxRPMValid
+ * Description: returns a boolean representing the valididty of last set maximum RPM
+ * Inputs: 
+ * Outputs: Bool true if valid false otherwise
+ */
 bool FormData::IsMaxRPMValid(void){
 	display_error("Error pending on semaphore in IsMaxRPMValid", OSSemPend(&mySem, 0));
 	bool copy_maxrpm_valid = maxrpm_valid;
 	display_error("Error posting to semaphore in IsMinRPMValid", OSSemPost(&mySem));
 	return copy_maxrpm_valid;
 }
+
+/* Name: IsRotationsValid
+ * Description: returns a boolean representing the valididty of last set number of rotations
+ * Inputs: 
+ * Outputs: Bool true if valid false otherwise
+ */
 bool FormData::IsRotationsValid(void){
 	display_error("Error pending on semaphore in IsRotationsValid", OSSemPend(&mySem, 0));
 	bool copy_rot_valid = rot_valid;
@@ -250,6 +267,12 @@ bool FormData::IsRotationsValid(void){
 	return copy_rot_valid;
 
 }
+
+/* Name: IsDirectionValid
+ * Description: returns a boolean representing the valididty of last set direction
+ * Inputs: 
+ * Outputs: Bool true if valid false otherwise
+ */
 bool FormData::IsDirectionValid(void){
 	display_error("Error pending on semaphore in IsDirectionValid", OSSemPend(&mySem, 0));
 	bool copy_dir_valid = dir_valid;
@@ -257,6 +280,11 @@ bool FormData::IsDirectionValid(void){
 	return copy_dir_valid;
 }
 
+/* Name: checkNumericString
+ * Description: returns a boolean representing the valididty of an input string representing a numeric value
+ * Inputs: 
+ * Outputs: Bool true if valid false otherwise
+ */
 bool FormData::checkNumericString(char * str){
 	char * pch;
 	int i = 0;

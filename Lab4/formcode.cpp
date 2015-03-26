@@ -131,6 +131,17 @@ extern "C"
 extern FormData myData;
 extern OS_SEM form_sem;
 
+/* Name: CheckExtractResult
+ * Description: This function is used to extract a field from an HTML form sent to the server
+ * with a post.
+ * Inputs: 
+ * char * buffer is the output buffer for the field
+ * int buf_size is the size of the output buffer
+ * char * pData is the data portion of the post request
+ * char * name is the name of the field
+ * char * err is an error message to print if something goes wrong
+ * Outputs: void
+ */
 void CheckExtractResult(char* buffer, int buf_size, char *pData, char* name, char* err) {
 	int result = ExtractPostData( name, pData, buffer , buf_size);
 
