@@ -185,7 +185,7 @@ BYTE FormData::SetDirection(char * dir){
 		direction = CCW;
 	} else if (strncmp(dir, stop, strlen(stop)) == 0) {
 		direction = STOP;
-		iprintf("Stop me in SetDirection\n");
+		iprintf("Stop me clicked\n");
 		dir_valid = false;
 		display_error("Error posting to semaphore in SetDirection", OSSemPost(&mySem));
 		return FORM_OK;

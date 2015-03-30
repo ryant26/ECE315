@@ -12,7 +12,7 @@ and Nancy's keypad.
 - Removed ValueGrid because it's unused
 - Removed GetNumber because it's unused
 - Removed all flag functions
-*/
+ */
 #include "predef.h"
 #include <stdio.h>
 #include <ctype.h>
@@ -26,13 +26,16 @@ and Nancy's keypad.
 #include <pinmap.h>
 #include "keypad.h"
 
-	const char KeypadButtonMapText[BUTTONS] [MAX_BUTTON_NAME] =
-	{
-	"*", "*", "*", "*",
-	"*", "*", "*", "*",
-	"*", "*", "*", "*",
-	"*", "*", "*", "*"
-	};
+const char KeypadButtonMapText[BUTTONS] [MAX_BUTTON_NAME] =
+{
+		// Keypad mapped from A-D, 1-4 from Lab 2
+		// For Exercise 4, the four chosen keys labeled with
+		// first letter of direction
+		"1", "2", "3", "D",
+		"L", "6", "7", "U",
+		"9", "10", "11", "12",
+		"R", "14", "15", "16"
+};
 
 /* Name:Keypad Constructor
  * Description: Constructor for the Keypad class. Not much to do beyond
@@ -53,19 +56,19 @@ Keypad::Keypad(void)
 void Keypad::Init(void)
 {
 	// Set the DA, DB, DC, DD , and DAvail pins to be general purpose IO pins
-		KEYPAD_DO_A.function(PIN_GPIO);	// Keypad Data out A
-		KEYPAD_DO_B.function(PIN_GPIO);	// Keypad Data Out B
-		KEYPAD_DO_C.function(PIN_GPIO);	// Keypad Data Out C
-		KEYPAD_DO_D.function(PIN_GPIO);	// Keypad Data out D
-		KEYPAD_D_AVAIL.function(PIN_GPIO);	// Keypad Data Available
+	KEYPAD_DO_A.function(PIN_GPIO);	// Keypad Data out A
+	KEYPAD_DO_B.function(PIN_GPIO);	// Keypad Data Out B
+	KEYPAD_DO_C.function(PIN_GPIO);	// Keypad Data Out C
+	KEYPAD_DO_D.function(PIN_GPIO);	// Keypad Data out D
+	KEYPAD_D_AVAIL.function(PIN_GPIO);	// Keypad Data Available
 
-		// Set the DO_A, DO_B, DO_C, DO_D and DO_Avail pins to be
-		// high impedance input
-		KEYPAD_DO_A.hiz();	//Set KEYPAD Data out A
-		KEYPAD_DO_B.hiz();	//Set KEYPAD Data out B
-		KEYPAD_DO_C.hiz();	//Set KEYPAD Data out C
-		KEYPAD_DO_D.hiz();	//Set KEYPAD Data out D
-		KEYPAD_D_AVAIL.hiz();	// Set KEYPAD Data Available
+	// Set the DO_A, DO_B, DO_C, DO_D and DO_Avail pins to be
+	// high impedance input
+	KEYPAD_DO_A.hiz();	//Set KEYPAD Data out A
+	KEYPAD_DO_B.hiz();	//Set KEYPAD Data out B
+	KEYPAD_DO_C.hiz();	//Set KEYPAD Data out C
+	KEYPAD_DO_D.hiz();	//Set KEYPAD Data out D
+	KEYPAD_D_AVAIL.hiz();	// Set KEYPAD Data Available
 }
 
 /* Name:read_data
@@ -77,11 +80,11 @@ void Keypad::Init(void)
 void Keypad::read_data(void)
 {
 	//Record values on DA, DB, DC, DD from 922 Encoder
-		last_encoded_data = 0;
-		if (KEYPAD_DO_A) last_encoded_data += 0x01;
-		if (KEYPAD_DO_B) last_encoded_data += 0x02;
-		if (KEYPAD_DO_C) last_encoded_data += 0x04;
-		if (KEYPAD_DO_D) last_encoded_data += 0x08;
+	last_encoded_data = 0;
+	if (KEYPAD_DO_A) last_encoded_data += 0x01;
+	if (KEYPAD_DO_B) last_encoded_data += 0x02;
+	if (KEYPAD_DO_C) last_encoded_data += 0x04;
+	if (KEYPAD_DO_D) last_encoded_data += 0x08;
 }
 
 /* Name:GetNewButtonNumber

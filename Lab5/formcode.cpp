@@ -187,7 +187,6 @@ int MyDoPost( int sock, char *url, char *pData, char *rxBuffer )
 
 		CheckExtractResult(buffer, buf_size, pData, "ECE315_form", "Error on validate/stop\n");
 	} else if (strncmp(buffer, stop_me, strlen(stop_me)) == 0) {
-		iprintf("Stop me\n");
 		myData.SetDirection("STOP");
 	}
 	memset(buffer, 0, buf_size * sizeof(char));

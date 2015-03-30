@@ -43,17 +43,38 @@
 #include "motorconstants.h"
 #include "formdata.h"
 
-const char *AppName = "put your name here";
+const char *AppName = "RT CH";
+
+#define MAX_COUNTER_BUFFER_LENGTH 100
+
+#define EPPAR_RISING_EDGE 	0x40
+#define EPDDR_INPUT 		0xff3f
+#define EPIER_ENABLED		0x8
+#define EPFR_SET			0x8
+#define NUM_ELEMENTS		10
+
+#define LOWER_RIGHT 		79
+#define UPPER_RIGHT			39
+#define UPPER_LEFT			0
+#define LOWER_LEFT			40
+#define ONE_LINE			40
+
+#define INTCTRL0			0
+#define IRQVECTOR			3
+#define INTLVL1				1
+#define PRILVL1				1
 
 extern "C"
 {
-   void UserMain( void *pd );
-   void DisplayLameCounter( int sock, PCSTR url );
-   void ValidateMinRPMImage (int sock, PCSTR url);
-   void ValidateMaxRPMImage (int sock, PCSTR url);
-   void ValidateRotationImage (int sock, PCSTR url);
-   void ValidateDirectionImage (int sock, PCSTR url);
-   void DisplayMotorMode (int sock, PCSTR url);
+	void UserMain( void *pd );
+	void DisplayLameCounter( int sock, PCSTR url );
+	void ValidateMinRPMImage (int sock, PCSTR url);
+	void ValidateMaxRPMImage (int sock, PCSTR url);
+	void ValidateRotationImage (int sock, PCSTR url);
+	void ValidateDirectionImage (int sock, PCSTR url);
+	void DisplayMotorMode (int sock, PCSTR url);
+	void IRQIntInit(void);
+	void SetIntc(int intc, long func, int vector, int level, int prio);
 }
 
 extern void RegisterPost();
@@ -62,9 +83,9 @@ FormData myData;
 OS_SEM form_sem;
 Keypad myKeypad;
 Lcd myLCD;
+OS_Q myQueue;
+void * myQueueStorage[NUM_ELEMENTS];
 Stepper myStepper(SM_MASTER_CHANNEL, SM_ACCEL_TABLE_SIZE);
-
-#define MAX_COUNTER_BUFFER_LENGTH 100
 
 char valid_imgstring[] = "<img src=\"http://www.veryicon.com/icon/png/Movie%20%26%20TV/Looney%20Tunes/Bugs%20Bunny%20Carrot.png\" width = 40 height = 40</img>";
 char invalid_imgstring[] = "<img src=\"http://www.veryicon.com/icon/png/Movie%20%26%20TV/Looney%20Tunes/Elmer%20Fudd%20Hunting.png\" width = 40 height = 40</img>";
@@ -93,8 +114,8 @@ void UserMain( void *pd )
 	 */
 
 	myStepper.Init(myData.GetMode(),
-						SM_MAX_PERIOD,
-						SM_INIT_SLEW_PERIOD);
+			SM_MAX_PERIOD,
+			SM_INIT_SLEW_PERIOD);
 
 
 
@@ -104,15 +125,16 @@ void UserMain( void *pd )
 	//Call a registration function for our Form code
 	// so POST requests are handled properly.
 	RegisterPost();
-
 	myLCD.Clear(LCD_BOTH_SCR);
 	myLCD.PrintString(LCD_UPPER_SCR, "Welcome to Lab 5 - ECE315");
 	OSTimeDly(TICKS_PER_SECOND*1);
-
+	IRQIntInit();
+	OSQInit(&myQueue, myQueueStorage, NUM_ELEMENTS);
+	char* msg;
 	while ( 1 )
 	{
-
 		if (myData.ShouldMove()){
+			iprintf("Spinning\n");
 			myStepper.Step(100);// cw movement 100 steps = 1 rotation in full step mode
 			OSTimeDly(TICKS_PER_SECOND*4);
 			myStepper.Step(-100); // ccw movement 100 steps = 1 rotation in full step mode
@@ -192,6 +214,26 @@ void DisplayMotorMode (int sock, PCSTR url){
 	}
 }
 
+/* The INTERRUPT MACRO handles the house keeping for the vector table
+ * and interrupt model.
+ * Unfortunately the 0x2500 magic number must stay due to the MACRO syntax
+ * The 0x2500 refers to the status register value that the microprocessor
+ * will have during the interrupt.
+ */
+
+INTERRUPT(out_irq_pin_isr, 0x2500){
+	sim.eport.epfr |= EPFR_SET;
+	OSQPost(&myQueue, (void*)myKeypad.GetNewButtonString());
+}
+
+/* Initialization of interrupt registers */
+void IRQIntInit(void) {
+	sim.eport.eppar |= EPPAR_RISING_EDGE;
+	sim.eport.epddr &= EPDDR_INPUT;
+	sim.eport.epier |= EPIER_ENABLED;
+
+	SetIntc(INTCTRL0, (long)out_irq_pin_isr, IRQVECTOR, INTLVL1, PRILVL1);
+}
 
 
 
