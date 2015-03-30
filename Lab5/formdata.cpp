@@ -11,6 +11,7 @@
 #include <ucos.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <utils.h>
 
 #define NO_TIMEOUT 			0
 #define MIN_RPM_LIMIT 		1

@@ -47,6 +47,8 @@
 
 #define SECONDS_PER_MINUTE		60
 
+#define SLAVE_CHANNEL_OFFSET 	2
+
 //Force x to be in the range of: a < x < b
 #define PutInRange(x,a,b) \
 	if (x < (a))		x = (a); \
@@ -64,6 +66,7 @@ protected:
 	int table_size;
 	int my_output_mode;
 	int steps_per_rev;
+	int slave_channel;
 
 	//calculate my_accel_tbl based on start and slew period
 	void build_table(unsigned long start, unsigned long slew);

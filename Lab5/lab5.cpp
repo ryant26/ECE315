@@ -79,7 +79,12 @@ void UserMain( void *pd )
 	EnableAutoUpdate();
 
 	eTPUInit();
-	myData.Init(0);
+	if (getdipsw()) {
+		myData.Init(ECE315_ETPU_SM_HALF_STEP_MODE);
+	} else {
+		myData.Init(ECE315_ETPU_SM_FULL_STEP_MODE);
+	}
+
 	myLCD.Init(LCD_BOTH_SCR);
 	myKeypad.Init();
 
@@ -87,7 +92,7 @@ void UserMain( void *pd )
 	 * from the DIP switches.
 	 */
 
-	myStepper.Init(ECE315_ETPU_SM_FULL_STEP_MODE,
+	myStepper.Init(myData.GetMode(),
 						SM_MAX_PERIOD,
 						SM_INIT_SLEW_PERIOD);
 
@@ -135,7 +140,6 @@ void DisplayLameCounter( int sock, PCSTR url )
 		snprintf(buffer,MAX_COUNTER_BUFFER_LENGTH, "<H1>The page has been reloaded %d times. </H1>", form_counter );
 		form_counter++;
 		writestring(sock,(const char *) buffer);
-
 	}
 }
 
@@ -181,10 +185,10 @@ void ValidateDirectionImage (int sock, PCSTR url)
 }
 
 void DisplayMotorMode (int sock, PCSTR url){
-	if (!getdipsw()){
-		writestring(sock, "Full Step");
-	} else {
+	if (myData.GetMode()){
 		writestring(sock, "Half Step");
+	} else {
+		writestring(sock, "Full Step");
 	}
 }
 

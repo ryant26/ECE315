@@ -33,6 +33,7 @@ Stepper::Stepper(int mstr_channel, int accel_size)
 {
 	table_size = accel_size;
 	master_channel = mstr_channel;
+	slave_channel = master_channel + SLAVE_CHANNEL_OFFSET;
 };
 
 /* Name:Init
@@ -65,13 +66,13 @@ void Stepper::Init(int mode, unsigned long start, unsigned long slew)
 
 		//Initialize the two drive signals
 		if (fs_etpu_sm_init(
-			master_channel,				// Stepper Stepper master channel
-		    ECE315_ETPU_SM_FULL_STEP, // Use two phase full step configuration
-		    0,						// Motor Start Position
-		    start,					// Start Period
-		    slew,					// Slew Period
-			my_accel_tbl, 			// Pointer to acceleration table
-			table_size				// Size of Acceleration table
+				master_channel,				// Stepper Stepper master channel
+				ECE315_ETPU_SM_FULL_STEP, // Use two phase full step configuration
+				0,						// Motor Start Position
+				start,					// Start Period
+				slew,					// Slew Period
+				my_accel_tbl, 			// Pointer to acceleration table
+				table_size				// Size of Acceleration table
 		) == FS_ETPU_ERROR_MALLOC) iprintf ("MALLOC FAIL FULL!!!");
 
 		/* Pull enable lines high permanently */
@@ -85,7 +86,34 @@ void Stepper::Init(int mode, unsigned long start, unsigned long slew)
 		fs_etpu_sm_enable(master_channel, FS_ETPU_PRIORITY_LOW);
 	}
 	/************** Half-Step Mode ***************/
-	else {}
+	else {
+		//Define steps per revolution for HALF STEP
+		steps_per_rev = STEPS_PER_REV_HALF_STEP;
+
+		//Initialize enable signal
+		if (fs_etpu_sm_init(
+				slave_channel,
+				ECE315_ETPU_SM_2PHASE_HALF_STEP_ENA,
+				0,				// Motor Start Position
+				start,
+				slew,
+				my_accel_tbl,
+				table_size) == FS_ETPU_ERROR_MALLOC) iprintf ("MALLOC FAIL FULL!!!");
+
+		fs_etpu_sm_enable(slave_channel, FS_ETPU_PRIORITY_LOW);
+
+		// Initialize drive signal
+		if (fs_etpu_sm_init(
+				master_channel,
+				ECE315_ETPU_SM_2PHASE_HALF_STEP_DRIVE,
+				0,				// Motor Start Position
+				start,
+				slew,
+				my_accel_tbl,
+				table_size) == FS_ETPU_ERROR_MALLOC) iprintf ("MALLOC FAIL FULL!!!");
+
+		fs_etpu_sm_enable(master_channel, FS_ETPU_PRIORITY_LOW);
+	}
 	delete 	my_accel_tbl;
 }
 
@@ -102,6 +130,9 @@ void Stepper::NewAccelTable()
 	build_table(GetStartPeriod(), GetSlewPeriod());
 
 	fs_etpu_sm_table(master_channel, my_accel_tbl);
+	if (my_output_mode == ECE315_ETPU_SM_HALF_STEP_MODE) {
+		fs_etpu_sm_table(slave_channel, my_accel_tbl);
+	}
 
 	delete 	my_accel_tbl;
 }
@@ -116,6 +147,9 @@ void Stepper::Step(int steps)
 {
 	// movement is always relative to the current position.
 	fs_etpu_sm_set_dp(master_channel, fs_etpu_sm_get_cp(master_channel) + steps);
+	if (my_output_mode == ECE315_ETPU_SM_HALF_STEP_MODE) {
+		fs_etpu_sm_set_dp(slave_channel, fs_etpu_sm_get_cp(slave_channel) + steps);
+	}
 }
 
 /* Name: SetSlewPeriod
@@ -131,6 +165,9 @@ unsigned int Stepper::SetSlewPeriod(unsigned int slew)
 
 	fs_etpu_sm_set_sp(master_channel, slew);
 
+	if (my_output_mode == ECE315_ETPU_SM_HALF_STEP_MODE) {
+		fs_etpu_sm_set_sp(slave_channel, slew);
+	}
 	NewAccelTable();
 
 	return slew;
@@ -148,6 +185,9 @@ unsigned int Stepper::SetStartPeriod(unsigned int start)
 
 	fs_etpu_sm_set_st(master_channel, start);
 
+	if (my_output_mode == ECE315_ETPU_SM_HALF_STEP_MODE) {
+		fs_etpu_sm_set_sp(slave_channel, start);
+	}
 	NewAccelTable();
 
 	return start;
@@ -268,5 +308,10 @@ unsigned int Stepper::SetSlewPeriodUsingRPM(unsigned int rpm){
 void Stepper::Stop(void ) {
 	fs_etpu_sm_disable( master_channel, FS_ETPU_SM_DISABLE_LOW);
 	fs_etpu_sm_enable( master_channel, FS_ETPU_PRIORITY_LOW);
+
+	if (my_output_mode == ECE315_ETPU_SM_HALF_STEP_MODE) {
+		fs_etpu_sm_disable( slave_channel, FS_ETPU_SM_DISABLE_LOW);
+		fs_etpu_sm_enable( slave_channel, FS_ETPU_PRIORITY_LOW);
+	}
 }
 
