@@ -106,18 +106,16 @@ void UserMain( void *pd )
 
 	while ( 1 )
 	{
-//		iprintf("Before getting min RPM\n");
-//		myStepper.SetStartPeriodUsingRPM(10);
-//		iprintf("Before getting max RPM\n");
-//		myStepper.SetSlewPeriodUsingRPM(10);
-//		iprintf("After getting max RPM\n");
 
-		myStepper.Step(100);// cw movement 100 steps = 1 rotation in full step mode
-		OSTimeDly(TICKS_PER_SECOND*3);
-		myStepper.Step(-100); // ccw movement 100 steps = 1 rotation in full step mode
-		OSTimeDly(TICKS_PER_SECOND*3);
+		if (myData.ShouldMove()){
+			myStepper.Step(100);// cw movement 100 steps = 1 rotation in full step mode
+			OSTimeDly(TICKS_PER_SECOND*4);
+			myStepper.Step(-100); // ccw movement 100 steps = 1 rotation in full step mode
+			OSTimeDly(TICKS_PER_SECOND*4);
+		}
 	}
 }
+
 
 /* Name: DisplayLameCounter
  * Description: Displays the number of times the page has been (re)loaded.

@@ -37,6 +37,7 @@ public:
 	BYTE SetDirection(char * dir);
 	BYTE GetDirection(void);
 	BYTE GetMode(void);
+	bool ShouldMove(void);
 	BYTE Init(BYTE motor_mode);
 	bool IsMinRPMValid(void);
 	bool IsMaxRPMValid(void);

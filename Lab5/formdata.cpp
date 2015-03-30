@@ -257,6 +257,13 @@ bool FormData::IsDirectionValid(void){
 	return copy_dir_valid;
 }
 
+bool FormData:: ShouldMove(){
+	display_error("Error pending on semaphore in GetShouldMove", OSSemPend(&mySem, 0));
+	bool copy = minrpm_valid && maxrpm_valid && rot_valid && dir_valid;
+	display_error("Error posting to semaphore in GetShouldMove", OSSemPost(&mySem));
+	return copy;
+}
+
 bool FormData::checkNumericString(char * str){
 	char * pch;
 	int i = 0;
