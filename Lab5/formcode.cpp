@@ -163,32 +163,43 @@ int MyDoPost( int sock, char *url, char *pData, char *rxBuffer )
 	// Insert your post request handling here
 	int buf_size = 50;  // arbitrary buffer size
 	char buffer[buf_size];
+	char* validate_me = "validate_me";
+	char* stop_me = "stop_me";
+	memset(buffer, 0, buf_size * sizeof(char));
+
+	CheckExtractResult(buffer, buf_size, pData, "ECE315_form", "Error on validate/stop\n");
+	if (strncmp(buffer, validate_me, strlen(validate_me)) == 0) {
+		CheckExtractResult(buffer, buf_size, pData, "maxrpm", "Error on maxrpm\n");
+		myData.SetMaxRPM(buffer);
+		memset(buffer, 0, buf_size * sizeof(char));
+
+		CheckExtractResult(buffer, buf_size, pData, "minrpm", "Error on minrpm\n");
+		myData.SetMinRPM(buffer);
+		memset(buffer, 0, buf_size * sizeof(char));
+
+		CheckExtractResult(buffer, buf_size, pData, "rotations", "Error on rotations\n");
+		myData.SetRotations(buffer);
+		memset(buffer, 0, buf_size * sizeof(char));
+
+		CheckExtractResult(buffer, buf_size, pData, "direction", "Error on direction\n");
+		myData.SetDirection(buffer);
+		memset(buffer, 0, buf_size * sizeof(char));
+
+		CheckExtractResult(buffer, buf_size, pData, "ECE315_form", "Error on validate/stop\n");
+	} else if (strncmp(buffer, stop_me, strlen(stop_me)) == 0) {
+		iprintf("Stop me\n");
+		myData.SetDirection("STOP");
+	}
 	memset(buffer, 0, buf_size * sizeof(char));
 
 
-	CheckExtractResult(buffer, buf_size, pData, "maxrpm", "Error on maxrpm");
 
-	myData.SetMaxRPM(buffer);
-	memset(buffer, 0, buf_size * sizeof(char));
+	// We have to respond to the post with a new HTML page...
+	// In this case we will redirect so the browser will
+	//go to that URL for the response...
+	RedirectResponse( sock, "INDEX.HTM" );
 
-	CheckExtractResult(buffer, buf_size, pData, "minrpm", "Error on minrpm");
-	myData.SetMinRPM(buffer);
-	memset(buffer, 0, buf_size * sizeof(char));
-
-	CheckExtractResult(buffer, buf_size, pData, "rotations", "Error on rotations");
-	myData.SetRotations(buffer);
-	memset(buffer, 0, buf_size * sizeof(char));
-
-	CheckExtractResult(buffer, buf_size, pData, "direction", "Error on direction");
-	myData.SetDirection(buffer);
-	memset(buffer, 0, buf_size * sizeof(char));
-
-   // We have to respond to the post with a new HTML page...
-   // In this case we will redirect so the browser will
-   //go to that URL for the response...
-   RedirectResponse( sock, "INDEX.HTM" );
-
-   return 0;
+	return 0;
 }
 
 
@@ -200,6 +211,6 @@ int MyDoPost( int sock, char *url, char *pData, char *rxBuffer )
  */
 void RegisterPost()
 {
-   SetNewPostHandler( MyDoPost );
+	SetNewPostHandler( MyDoPost );
 
 }

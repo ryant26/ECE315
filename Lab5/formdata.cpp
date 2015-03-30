@@ -177,11 +177,18 @@ int  FormData::GetRotations(void){
 BYTE FormData::SetDirection(char * dir){
 	char* clockwise = "Clockwise";
 	char* counterclockwise = "Counter-Clockwise";
+	char* stop = "STOP";
 	display_error("Error pending on semaphore in SetDirection", OSSemPend(&mySem, 0));
 	if (strncmp(dir, clockwise , strlen(clockwise)) == 0) { //arbitrary max string compare size
 		direction = CW;
 	} else if (strncmp(dir, counterclockwise, strlen(counterclockwise)) == 0 ) { //arbitrary max string compare size
 		direction = CCW;
+	} else if (strncmp(dir, stop, strlen(stop)) == 0) {
+		direction = STOP;
+		iprintf("Stop me in SetDirection\n");
+		dir_valid = false;
+		display_error("Error posting to semaphore in SetDirection", OSSemPost(&mySem));
+		return FORM_OK;
 	} else {
 		dir_valid = false;
 		display_error("Error posting to semaphore in SetDirection", OSSemPost(&mySem));
