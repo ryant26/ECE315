@@ -162,14 +162,9 @@ void UserMain( void *pd )
 			myLCD.Clear(LCD_BOTH_SCR);
 			myLCD.PrintString(LCD_UPPER_SCR, "Direction == CCW");
 			break;
-
 		}
-		OSTimeDly(TICKS_PER_SECOND*4);
-
 	}
 }
-
-
 
 
 /* Name: DisplayLameCounter
@@ -251,8 +246,7 @@ void DisplayMotorMode (int sock, PCSTR url){
 
 INTERRUPT(out_irq_pin_isr, 0x2500){
 	sim.eport.epfr |= EPFR_SET;
-
-	OSQPost(&myQueue, (void*)"1");
+	OSQPost(&myQueue, (void*)myKeypad.GetNewButtonString());
 }
 
 /* Initialization of interrupt registers */
