@@ -19,6 +19,7 @@
 #define MAX_ROT_LIMIT		10000
 #define MIN_ROT_LIMIT		1
 
+
 extern BYTE display_error(const char * info, BYTE error);
 
 
@@ -53,9 +54,9 @@ FormData::~FormData() {
 BYTE FormData::SetMaxRPM(char * rpm) {
 	display_error("Error pending on semaphore in SetMaxRPM", OSSemPend(&mySem, NO_TIMEOUT));
 	int check_maxrpm = 0;
-		if (checkNumericString(rpm)) {
-			check_maxrpm = atoi(rpm);
-		}
+	if (checkNumericString(rpm)) {
+		check_maxrpm = atoi(rpm);
+	}
 	if (check_maxrpm < MIN_RPM_LIMIT || check_maxrpm > MAX_RPM_LIMIT) {
 		maxrpm_valid = false;
 		display_error("Error posting to semaphore in SetMaxRPM", OSSemPost(&mySem));
@@ -117,8 +118,12 @@ int  FormData::GetMinRPM(void) {
  * Inputs:
  * Outputs:
  */
-BYTE FormData::SetSteps(char * steps) {
-	// Not used in lab 4. No Semaphore for constant
+BYTE FormData::SetSteps(int steps) {
+
+	display_error("Error pending on semaphore in SetSteps", OSSemPend(&mySem, 0));
+	int_steps = steps;
+	display_error("Error posting to semaphore in SetSteps", OSSemPost(&mySem));
+
 	return FORM_OK;
 }
 
@@ -267,9 +272,21 @@ bool FormData::IsDirectionValid(void){
 
 bool FormData:: ShouldMove(){
 	display_error("Error pending on semaphore in GetShouldMove", OSSemPend(&mySem, 0));
-	bool copy = minrpm_valid && maxrpm_valid && rot_valid && dir_valid;
+	bool copy = minrpm_valid && maxrpm_valid && rot_valid && dir_valid && !stop;
 	display_error("Error posting to semaphore in GetShouldMove", OSSemPost(&mySem));
 	return copy;
+}
+
+bool FormData::getStop(){
+	display_error("Error pending on semaphore in getStop", OSSemPend(&mySem, 0));
+	bool copy_stop = stop;
+	display_error("Error posting to semaphore in getStop", OSSemPost(&mySem));
+	return copy_stop;
+}
+void FormData::setStop(bool val){
+	display_error("Error pending on semaphore in setStop", OSSemPend(&mySem, 0));
+	stop = val;
+	display_error("Error posting to semaphore in setStop", OSSemPost(&mySem));
 }
 
 bool FormData::checkNumericString(char * str){

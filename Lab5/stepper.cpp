@@ -186,7 +186,7 @@ unsigned int Stepper::SetStartPeriod(unsigned int start)
 	fs_etpu_sm_set_st(master_channel, start);
 
 	if (my_output_mode == ECE315_ETPU_SM_HALF_STEP_MODE) {
-		fs_etpu_sm_set_sp(slave_channel, start);
+		fs_etpu_sm_set_st(slave_channel, start);
 	}
 	NewAccelTable();
 

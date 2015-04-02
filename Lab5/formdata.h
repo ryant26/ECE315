@@ -30,7 +30,7 @@ public:
 	int  GetMaxRPM(void);
 	BYTE SetMinRPM(char * rpm);
 	int  GetMinRPM(void);
-	BYTE SetSteps(char * st);
+	BYTE SetSteps(int str);
 	int  GetSteps (void);
 	BYTE SetRotations(char * rot);
 	int  GetRotations(void);
@@ -43,7 +43,8 @@ public:
 	bool IsMaxRPMValid(void);
 	bool IsRotationsValid(void);
 	bool IsDirectionValid(void);
-
+	bool getStop();
+	void setStop(bool);
 
 private:
 	int  int_maxrpm;
@@ -58,6 +59,7 @@ private:
 	bool rot_valid;
 	bool dir_valid;
 	bool checkNumericString(char *);
+	bool stop;
 };
 
 #endif /* FORMDATA_H_ */

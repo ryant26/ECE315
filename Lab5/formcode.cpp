@@ -123,6 +123,7 @@
 #include <eTPU.h>
 #include <ETPUInit.h>
 #include <eTPU_sm.h>
+#include "stepper.h"
 
 extern "C"
 {
@@ -130,6 +131,8 @@ extern "C"
 
 extern FormData myData;
 extern OS_SEM form_sem;
+extern Stepper myStepper;
+extern OS_Q myQueue;
 
 void CheckExtractResult(char* buffer, int buf_size, char *pData, char* name, char* err) {
 	int result = ExtractPostData( name, pData, buffer , buf_size);
@@ -186,8 +189,36 @@ int MyDoPost( int sock, char *url, char *pData, char *rxBuffer )
 		memset(buffer, 0, buf_size * sizeof(char));
 
 		CheckExtractResult(buffer, buf_size, pData, "ECE315_form", "Error on validate/stop\n");
+		myData.setStop(false);
+
+		if (myData.ShouldMove()){
+			myStepper.SetSlewPeriodUsingRPM(myData.GetMaxRPM());
+			myStepper.SetStartPeriodUsingRPM(myData.GetMinRPM());
+			iprintf("%d %d \n", myData.GetMinRPM(), myData.GetMaxRPM());
+
+			int steps = 0;
+			if (myData.GetMode()) {
+				steps = myData.GetRotations() * STEPS_PER_REV_HALF_STEP;
+			} else {
+				steps = myData.GetRotations() * STEPS_PER_REV_FULL_STEP;
+			}
+
+			if (myData.GetDirection() == CW) {
+				steps *= 1;
+				myData.SetSteps(steps);
+				OSQPost(&myQueue, (void*)"3");
+			} else if (myData.GetDirection() == CCW) {
+				steps *= -1;
+				myData.SetSteps(steps);
+				OSQPost(&myQueue, (void*)"4");
+			}
+			iprintf("Spinning Steps: %d \n", myData.GetSteps());
+			myStepper.Step(myData.GetSteps());// cw movement 100 steps = 1 rotation in full step mode
+
+		}
 	} else if (strncmp(buffer, stop_me, strlen(stop_me)) == 0) {
-		myData.SetDirection("STOP");
+		myStepper.Stop();
+		OSQPost(&myQueue, (void*)"2");
 	}
 	memset(buffer, 0, buf_size * sizeof(char));
 

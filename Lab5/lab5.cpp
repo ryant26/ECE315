@@ -63,6 +63,9 @@ const char *AppName = "RT CH";
 #define IRQVECTOR			3
 #define INTLVL1				1
 #define PRILVL1				1
+#define USERTASK_PRIO		MAIN_PRIO + 1
+
+#define BUFFER_SIZE				50
 
 extern "C"
 {
@@ -75,6 +78,8 @@ extern "C"
 	void DisplayMotorMode (int sock, PCSTR url);
 	void IRQIntInit(void);
 	void SetIntc(int intc, long func, int vector, int level, int prio);
+	void StartTask1(void);
+	void Task1Main(void * pd);
 }
 
 extern void RegisterPost();
@@ -90,7 +95,8 @@ Stepper myStepper(SM_MASTER_CHANNEL, SM_ACCEL_TABLE_SIZE);
 char valid_imgstring[] = "<img src=\"http://www.veryicon.com/icon/png/Movie%20%26%20TV/Looney%20Tunes/Bugs%20Bunny%20Carrot.png\" width = 40 height = 40</img>";
 char invalid_imgstring[] = "<img src=\"http://www.veryicon.com/icon/png/Movie%20%26%20TV/Looney%20Tunes/Elmer%20Fudd%20Hunting.png\" width = 40 height = 40</img>";
 
-
+//User Task Stack
+DWORD Task1Stk[USER_TASK_STK_SIZE] __attribute__( ( aligned( 4 ) ) );
 
 void UserMain( void *pd )
 {
@@ -130,18 +136,40 @@ void UserMain( void *pd )
 	OSTimeDly(TICKS_PER_SECOND*1);
 	IRQIntInit();
 	OSQInit(&myQueue, myQueueStorage, NUM_ELEMENTS);
-	char* msg;
+
+	//Start task1
+	//StartTask1();
+
 	while ( 1 )
 	{
-		if (myData.ShouldMove()){
-			iprintf("Spinning\n");
-			myStepper.Step(100);// cw movement 100 steps = 1 rotation in full step mode
-			OSTimeDly(TICKS_PER_SECOND*4);
-			myStepper.Step(-100); // ccw movement 100 steps = 1 rotation in full step mode
-			OSTimeDly(TICKS_PER_SECOND*4);
+		void* msg = OSQPend(&myQueue, 0, &err);
+
+		switch(*(char*)msg) {
+		case '1':
+			myStepper.Stop();
+			myLCD.Clear(LCD_BOTH_SCR);
+			myLCD.PrintString(LCD_UPPER_SCR, "Emergency Stop Requested from Keypad");
+			break;
+		case '2':
+			myLCD.Clear(LCD_BOTH_SCR);
+			myLCD.PrintString(LCD_UPPER_SCR, "Stop request from Stop Me button");
+			break;
+		case '3':
+			myLCD.Clear(LCD_BOTH_SCR);
+			myLCD.PrintString(LCD_UPPER_SCR, "Direction == CW");
+			break;
+		case '4':
+			myLCD.Clear(LCD_BOTH_SCR);
+			myLCD.PrintString(LCD_UPPER_SCR, "Direction == CCW");
+			break;
+
 		}
+		OSTimeDly(TICKS_PER_SECOND*4);
+
 	}
 }
+
+
 
 
 /* Name: DisplayLameCounter
@@ -223,7 +251,8 @@ void DisplayMotorMode (int sock, PCSTR url){
 
 INTERRUPT(out_irq_pin_isr, 0x2500){
 	sim.eport.epfr |= EPFR_SET;
-	OSQPost(&myQueue, (void*)myKeypad.GetNewButtonString());
+
+	OSQPost(&myQueue, (void*)"1");
 }
 
 /* Initialization of interrupt registers */
@@ -234,6 +263,32 @@ void IRQIntInit(void) {
 
 	SetIntc(INTCTRL0, (long)out_irq_pin_isr, IRQVECTOR, INTLVL1, PRILVL1);
 }
+
+//void StartTask1(void) {
+//	BYTE err = OS_NO_ERR;
+//
+//	err = display_error ("Start Task 1: ",
+//					OSTaskCreatewName( Task1Main, 			//functional part of the task
+//					(void *)NULL,							// task data - not usually used
+//				 	(void *) &Task1Stk[USER_TASK_STK_SIZE], // task stack top
+//				 	(void *) &Task1Stk[0],					// task stack bottom
+//				 	USERTASK_PRIO, "Task 1" )					// task priority and task name
+//	);
+//}
+//
+//void	Task1Main( void * pd) {
+//	int i=0;
+//	while (1) {
+//		i++;
+//		BYTE err = OS_NO_ERR;
+//		void * out = OSQPend(&myQueue, 0, &err);
+//		myLCD.Clear(LCD_BOTH_SCR);
+//		myLCD.Home(LCD_UPPER_SCR);
+//		myLCD.PrintString(LCD_UPPER_SCR, "Emergency Stop Requested from Keypad");
+//		display_error("Pend failed", err );
+//		myStepper.Stop();
+//	}
+//}
 
 
 
