@@ -78,8 +78,6 @@ extern "C"
 	void DisplayMotorMode (int sock, PCSTR url);
 	void IRQIntInit(void);
 	void SetIntc(int intc, long func, int vector, int level, int prio);
-	void StartTask1(void);
-	void Task1Main(void * pd);
 }
 
 extern void RegisterPost();
@@ -136,9 +134,6 @@ void UserMain( void *pd )
 	OSTimeDly(TICKS_PER_SECOND*1);
 	IRQIntInit();
 	OSQInit(&myQueue, myQueueStorage, NUM_ELEMENTS);
-
-	//Start task1
-	//StartTask1();
 
 	while ( 1 )
 	{
@@ -258,31 +253,6 @@ void IRQIntInit(void) {
 	SetIntc(INTCTRL0, (long)out_irq_pin_isr, IRQVECTOR, INTLVL1, PRILVL1);
 }
 
-//void StartTask1(void) {
-//	BYTE err = OS_NO_ERR;
-//
-//	err = display_error ("Start Task 1: ",
-//					OSTaskCreatewName( Task1Main, 			//functional part of the task
-//					(void *)NULL,							// task data - not usually used
-//				 	(void *) &Task1Stk[USER_TASK_STK_SIZE], // task stack top
-//				 	(void *) &Task1Stk[0],					// task stack bottom
-//				 	USERTASK_PRIO, "Task 1" )					// task priority and task name
-//	);
-//}
-//
-//void	Task1Main( void * pd) {
-//	int i=0;
-//	while (1) {
-//		i++;
-//		BYTE err = OS_NO_ERR;
-//		void * out = OSQPend(&myQueue, 0, &err);
-//		myLCD.Clear(LCD_BOTH_SCR);
-//		myLCD.Home(LCD_UPPER_SCR);
-//		myLCD.PrintString(LCD_UPPER_SCR, "Emergency Stop Requested from Keypad");
-//		display_error("Pend failed", err );
-//		myStepper.Stop();
-//	}
-//}
 
 
 
